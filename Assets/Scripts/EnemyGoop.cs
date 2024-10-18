@@ -111,6 +111,13 @@ public class EnemyGoop : MonoBehaviour
     }
 
 
+void OnCollisionEnter(Collision other)
+{
+    if(other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
+    {
+    Destroy(other.gameObject);
+    }
+}
     
     private void OnDrawGizmosSelected()
     {
