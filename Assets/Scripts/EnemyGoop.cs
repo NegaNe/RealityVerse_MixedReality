@@ -32,6 +32,10 @@ public class EnemyGoop : MonoBehaviour
         OnDeath ??= new UnityEvent();
         OnDeath.AddListener(() => Destroy(gameObject));
     }
+        void Awake()
+    {
+        OnSpawn.Invoke();
+    }
 
     void Update()
     {
@@ -41,7 +45,7 @@ public class EnemyGoop : MonoBehaviour
         }
         else 
         {
-            // WanderAroundPlayer();
+            WanderAroundPlayer();
         }
 
         DetectPlayer();
@@ -110,7 +114,6 @@ public class EnemyGoop : MonoBehaviour
         }
     }
 
-
 void OnCollisionEnter(Collision other)
 {
     if(other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
@@ -127,11 +130,6 @@ void OnCollisionEnter(Collision other)
 
     void OnDestroy()
     {
-        OnDeath.Invoke();
-    }
-
-    void Awake()
-    {
-        OnSpawn.Invoke();
+        EnemySpawner.instance.NegateCounter();
     }
 }
