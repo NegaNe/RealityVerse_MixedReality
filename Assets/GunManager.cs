@@ -16,6 +16,7 @@ public class GunManager : MonoBehaviour
     }
     public WeaponType GunType;       
     public readonly GunManager ControllerType = new();
+    
 
 
     void Start()
@@ -25,21 +26,10 @@ public class GunManager : MonoBehaviour
 
         for (int i=0 ; i < LeftController.transform.childCount ; i++) {
         LeftHandControllerData[i] = LeftController.transform.GetChild(i).gameObject;
-
-            // if(LeftController.transform.GetChild(i).gameObject.activeSelf)
-            // {
-            //     ControllerType.LeftController = LeftHandControllerData[i];
-            // }
-
         }
         
         for (int i=0 ; i < RightController.transform.childCount ; i++) {
         RightHandControllerData[i] = RightController.transform.GetChild(i).gameObject;
-
-            // if(RightController.transform.GetChild(i).gameObject.activeSelf)
-            // {
-            //     ControllerType.RightController = RightHandControllerData[i];
-            // }
         }
     }
 
