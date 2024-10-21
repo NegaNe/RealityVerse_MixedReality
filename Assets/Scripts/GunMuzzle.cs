@@ -37,6 +37,6 @@ public class GunMuzzle : MonoBehaviour
         rb.velocity = spawnPoint.forward * bulletSpeed;
 
         // Optional: Destroy the bullet after some time to avoid cluttering the scene
-        Destroy(bulletInstance, 5f);
+        Destroy(bulletInstance, 3f);
     }
 }

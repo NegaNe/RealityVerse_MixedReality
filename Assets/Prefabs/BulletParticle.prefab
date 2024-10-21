@@ -122,7 +122,7 @@ MonoBehaviour:
   destroyableLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  destroyRadius: 0.1
+  destroyRadius: 0.2
 --- !u!54 &6692057909035012852
 Rigidbody:
   m_ObjectHideFlags: 0

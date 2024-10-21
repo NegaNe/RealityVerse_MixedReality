@@ -130,6 +130,7 @@ void OnCollisionEnter(Collision other)
 
     void OnDestroy()
     {
+        EnemySpawner.instance.KilledCounter();
         EnemySpawner.instance.NegateCounter();
     }
 }

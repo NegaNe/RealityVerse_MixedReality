@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
 {
     // Start is called before the first frame update
     public static GameController Instance;
+    [SerializeField]
+    public int MaxTotalEnemies = 16;
     public GameObject[] NavSurface;
 
     void Awake()
@@ -24,6 +26,17 @@ public class GameController : MonoBehaviour
     void Start()
     {
 
+    }
+
+    void Update()
+    {
+        if(EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies)
+        {
+            Debug.Log("Enemies Are All Dead!");
+        } else
+        {
+            Debug.Log("There Are : " + EnemySpawner.instance.EnemiesKilled + " Enemies Left!");
+        }
     }
 
     private int CountEnemy()
