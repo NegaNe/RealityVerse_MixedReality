@@ -9,11 +9,10 @@ public class EnemySpawner : MonoBehaviour
     public static EnemySpawner instance;
     public GameObject[] Spawners;
     public GameObject[] EnemyPrefabs;
-    public int MaxEnemies = 8;
     [SerializeField]
     public int SpawnAreaPosThreshold = 0;
-    public int EnemyCounter = 0;
-    public int EnemiesKilled = 0;
+    public int EnemyCounter {get ; private set;}
+    public int EnemiesKilled {get; private set;}
     private float SpawnTimer = 1f; //start spawn should be atleast 3-4 seconds per enemy, after around 20-30 enemies, it should be 1-2 seconds, even .5f.
 
     
@@ -33,22 +32,22 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemies()
     {
-        if(EnemyCounter < MaxEnemies && EnemiesKilled >= GameController.Instance.MaxTotalEnemies)
-        {
+        if(GameController.Instance.GunTaken == true && GameController.Instance.StartGame == true && EnemyCounter < GameController.Instance.MaxEnemiesInMap && EnemyCounter <= GameController.Instance.MaxTotalEnemies && EnemiesKilled+EnemyCounter <= GameController.Instance.MaxTotalEnemies){
+
         Vector3 spawnAreaPos = new Vector3(Random.Range(-SpawnAreaPosThreshold, SpawnAreaPosThreshold), 4, Random.Range(-SpawnAreaPosThreshold, SpawnAreaPosThreshold));
         int spawnRand = Random.Range(0, Spawners.Length);
         int enemyRand = Random.Range(0, EnemyPrefabs.Length);
 
         GameObject EnemyInstance = Instantiate(EnemyPrefabs[enemyRand], Spawners[spawnRand].transform.position + spawnAreaPos, Spawners[spawnRand].transform.rotation);
+
+        if(EnemyCounter >= GameController.Instance.MaxEnemiesInMap && EnemiesKilled+EnemyCounter >= GameController.Instance.MaxTotalEnemies)
+        CancelInvoke();
+        else
+        InvokeRepeating(nameof(SpawnEnemies), 0, SpawnTimer);
+
         if(EnemyInstance)
         EnemyCounter++;
-        Debug.Log("Enemy Count : " + EnemyCounter);
         }
-        else if(EnemyCounter >= MaxEnemies)
-        {
-            return;
-        }
-
     }
 
     public void NegateCounter()

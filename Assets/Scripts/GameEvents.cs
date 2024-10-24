@@ -6,7 +6,6 @@ using UnityEngine.Events;
 
 public class GameEvents : MonoBehaviour
 {
-    public UnityEvent unityEvent = new UnityEvent();
     [SerializeField]
     private GameObject GunChoice;
     // Start is called before the first frame update
@@ -18,16 +17,19 @@ public class GameEvents : MonoBehaviour
     // Update is called once per frame
 IEnumerator StartSequence()
 {
-    yield return new WaitForSeconds(6);
+
+
+    if(GameController.Instance.StartGame)
+    yield return new WaitForSeconds(8);
     AppearGunChoice();
-    yield return new WaitForSeconds(3);
-    
+    yield return new WaitForSeconds(4);
 
 yield break;
 }
 
 private void AppearGunChoice()
 {
-    
+   GameObject gunPod =  Instantiate(GunChoice);
+   gunPod.GetComponent<Animator>();
 }
 }
