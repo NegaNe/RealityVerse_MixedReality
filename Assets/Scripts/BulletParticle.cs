@@ -32,7 +32,5 @@ public class BulletParticle : MonoBehaviour
             Destroy(collision.gameObject);
       }
 
-
-        
     }
 }

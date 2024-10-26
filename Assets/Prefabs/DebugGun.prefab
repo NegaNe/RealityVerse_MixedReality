@@ -151,3 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 0}
+  bulletSpeed: 5
+  BulletDamage: 0
+  firingType: 0
+  weaponPos: 0

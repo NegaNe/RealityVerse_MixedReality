@@ -122,6 +122,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3443264d1caee32429e29db406378d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Health: 0
+  AttackDmg: 0
+  Speed: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -134,6 +137,7 @@ MonoBehaviour:
   wanderSpeed: 1
   proximityDuration: 5
   wanderDistanceFromPlayer: 8
+  enemyType: 1
 --- !u!54 &5400631248102022854
 Rigidbody:
   m_ObjectHideFlags: 0

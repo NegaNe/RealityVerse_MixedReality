@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,10 +8,12 @@ public class EnemySpawner : MonoBehaviour
 {
     // Start is called before the first frame update
     public static EnemySpawner instance;
-    public GameObject[] Spawners;
-    public GameObject[] EnemyPrefabs;
     [SerializeField]
-    public int SpawnAreaPosThreshold = 0;
+    private GameObject[] Spawners = new GameObject[4];
+    [SerializeField]
+    private GameObject[] EnemyPrefabs;
+    [SerializeField]
+    public int SpawnAreaPosThreshold = 3;
     public int EnemyCounter {get ; private set;}
     public int EnemiesKilled {get; private set;}
     private float SpawnTimer = 1f; //start spawn should be atleast 3-4 seconds per enemy, after around 20-30 enemies, it should be 1-2 seconds, even .5f.
@@ -27,6 +30,8 @@ public class EnemySpawner : MonoBehaviour
         Destroy(instance);
         }
         InvokeRepeating(nameof(SpawnEnemies), 0, SpawnTimer);
+
+        Spawners = GameObject.FindGameObjectsWithTag("Spawner");
     }
 
 

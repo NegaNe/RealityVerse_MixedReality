@@ -5,6 +5,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
+using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
+using UnityEngine.Events;
 
 public class GameController : MonoBehaviour
 {
@@ -14,9 +16,12 @@ public class GameController : MonoBehaviour
     public int MaxTotalEnemies;
     public int MaxEnemiesInMap;
     public TMP_Text EnemiesKilled;
-
     public bool GunTaken, StartGame;
+    public GameObject[] LevelObject;
+    public GameObject LevelSelector;
     public GameObject SummaryMenu;
+    public UnityEvent AfterPickLevel;
+
 
     void Awake()
     {
@@ -24,28 +29,30 @@ public class GameController : MonoBehaviour
         {
             Instance = this;
         } 
-        else if(Instance != this)
+        else
         {
-            Destroy(gameObject);
+            Destroy(Instance);
         }
     }
-
 
     void Update()
     {
         GameState();
-
     }
 
     private void GameState ()
     {
+    try{
         if(EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies)
         {
-
             StartGame=false;
             SummaryMenu.SetActive(true);
         }
-
+    }
+    catch
+    {
+    return;
+    }
     }
 
     private int CountEnemy()
@@ -53,12 +60,16 @@ public class GameController : MonoBehaviour
         return 1;
     }
 
-    void OnApplicationQuit()
-    {
-        
-    }
     void RestartGame()
     {
     SceneManager.LoadScene(0);
+    }
+
+    public void LevelChange(int index)
+    {
+    StartGame=true;
+    LevelObject[index].SetActive(true);
+    StartCoroutine(GameEvents.Instance.AppearGunChoice());
+    LevelSelector.SetActive(false);
     }
 }

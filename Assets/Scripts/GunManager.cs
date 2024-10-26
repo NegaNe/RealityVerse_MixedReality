@@ -64,7 +64,6 @@ public class GunManager : MonoBehaviour
         Rifle[1].SetActive(newGun == WeaponType.Rifle);
         Shotgun[0].SetActive(newGun == WeaponType.Shotgun);
         Shotgun[1].SetActive(newGun == WeaponType.Shotgun);
-        
     }
 
 

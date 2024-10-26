@@ -8,28 +8,37 @@ public class GameEvents : MonoBehaviour
 {
     [SerializeField]
     private GameObject GunChoice;
+    [SerializeField]
+    private bool HasGunAppear;
     // Start is called before the first frame update
-    void Start()
+    public static GameEvents Instance;
+
+
+    private void Awake()
     {
-        StartCoroutine(nameof(StartSequence));
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Update is called once per frame
-IEnumerator StartSequence()
+
+
+public IEnumerator AppearGunChoice()
 {
-
-
-    if(GameController.Instance.StartGame)
-    yield return new WaitForSeconds(8);
-    AppearGunChoice();
-    yield return new WaitForSeconds(4);
-
-yield break;
+    yield return new WaitForSeconds(6f);
+    if(!HasGunAppear)
+    {
+    Instantiate(GunChoice);
+    HasGunAppear=true;
+    StopCoroutine(AppearGunChoice());
+    }
+    yield return null;
 }
 
-private void AppearGunChoice()
-{
-   GameObject gunPod =  Instantiate(GunChoice);
-   gunPod.GetComponent<Animator>();
-}
+
 }

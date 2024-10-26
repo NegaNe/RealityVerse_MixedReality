@@ -32,7 +32,8 @@ public class GunMuzzle : MonoBehaviour
     public enum FireType
     {
     Semi,
-    Auto
+    Auto,
+    Shotgun
     }
 
     public enum WeaponPos
@@ -58,6 +59,14 @@ public class GunMuzzle : MonoBehaviour
         SemiShoot();
         if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
         SemiShoot();
+        }
+
+        if(firingType == FireType.Shotgun){
+
+        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right)
+        Shotgun();
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
+        Shotgun();
         }
 
         if(firingType == FireType.Auto){
@@ -97,4 +106,30 @@ public class GunMuzzle : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             IsFiring=false;
     }
+
+    void Shotgun()
+{
+    int pelletCount = 5; // Number of pellets to fire
+    float spreadAngle = 15f; // Cone angle spread
+
+    for (int i = 0; i < pelletCount; i++)
+    {
+        // Instantiate each pellet at the spawn point
+        GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+        Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
+
+        // Calculate a spread direction within the cone angle
+        Vector3 spreadDirection = Quaternion.Euler(
+            Random.Range(-spreadAngle, spreadAngle),
+            Random.Range(-spreadAngle, spreadAngle),
+            0
+        ) * spawnPoint.forward;
+
+        // Apply force in the spread direction
+        rb.velocity = spreadDirection * bulletSpeed;
+
+        // Optional: Destroy the bullet after some time to avoid cluttering the scene
+        Destroy(bulletInstance, 3f);
+    }
+}
 }

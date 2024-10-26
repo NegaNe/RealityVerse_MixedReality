@@ -7,14 +7,49 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+
+public class Goop
+{
+    public int Health = 20;
+    public int AttackDmg = 8;
+    public float Speed=.4f;
+
+}
+
+public class BigGoop
+{
+    public int Health = 65;
+    public int AttackDmg = 20;
+    public float Speed=.2f;
+
+}
+
+public class FlyingGoop
+{
+    public int Health = 15;
+    public int AttackDmg = 3;
+    public float Speed=.4f;
+
+}
+
 public class EnemyGoop : MonoBehaviour
 {
+
+[SerializeField]
+    private int Health;
+[SerializeField]
+    private int AttackDmg;
+[SerializeField]
+    private float Speed;
+    private Goop goop = new Goop();
+    private BigGoop bigGoop = new BigGoop();
+    private FlyingGoop flyingGoop = new FlyingGoop();
     public UnityEvent OnDeath;
     public UnityEvent OnSpawn;
     public float wanderRadius = 5f; 
     public float detectionRadius = 15f; 
-    public float chaseSpeed = 5f;
-    public float wanderSpeed = 2f;
+    public float chaseSpeed = 0;
+    public float wanderSpeed = 0;
     public float proximityDuration = 5f; 
     public float wanderDistanceFromPlayer = 10f; 
     private NavMeshAgent agent;
@@ -23,15 +58,47 @@ public class EnemyGoop : MonoBehaviour
     private bool isChasing = false;
     private float proximityTimer = 0f;
 
+    [SerializeField]
+    public enum EnemyType
+    {
+    Goop,
+    BigGoop,
+    FlyingGoop
+    }
+    public EnemyType enemyType;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
+        InitStats();
         WanderTowardsPlayer(); 
-
-        OnDeath ??= new UnityEvent();
-        OnDeath.AddListener(() => Destroy(gameObject));
     }
+
+    private void InitStats()
+    {
+    switch (enemyType)
+    {
+    case EnemyType.Goop:
+        Health = goop.Health;
+        AttackDmg = goop.AttackDmg;
+        Speed = goop.Speed;
+    break;
+    case EnemyType.BigGoop:
+        Health = bigGoop.Health;
+        AttackDmg = bigGoop.AttackDmg;
+        Speed = bigGoop.Speed;
+    break;
+    case EnemyType.FlyingGoop:
+        Health = flyingGoop.Health;
+        AttackDmg = flyingGoop.AttackDmg;
+        Speed = flyingGoop.Speed;
+    break;
+    }
+
+
+    }
+
         void Awake()
     {
         OnSpawn.Invoke();
@@ -50,6 +117,11 @@ public class EnemyGoop : MonoBehaviour
 
         DetectPlayer();
     }
+
+
+
+
+
 
     void WanderTowardsPlayer()
     {
