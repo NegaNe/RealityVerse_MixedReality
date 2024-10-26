@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.03999996
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
@@ -58,6 +58,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 593773f6982f8484eadb9097746564b5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2152cfb434e497f42bd7554477e1c158, type: 2}
     - target: {fileID: 919132149155446097, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
       propertyPath: m_Name
@@ -108,18 +113,18 @@ NavMeshAgent:
   m_GameObject: {fileID: 3740327191996450740}
   m_Enabled: 1
   m_AgentTypeID: 1479372276
-  m_Radius: 1.03
+  m_Radius: 0.8
   m_Speed: 3
   m_Acceleration: 4
   avoidancePriority: 20
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.36
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
 --- !u!64 &1774041493663874206
 MeshCollider:
@@ -137,7 +142,7 @@ MeshCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
@@ -203,6 +208,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3443264d1caee32429e29db406378d50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Health: 0
+  AttackDmg: 0
+  Speed: 0
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
@@ -215,3 +223,4 @@ MonoBehaviour:
   wanderSpeed: 1
   proximityDuration: 5
   wanderDistanceFromPlayer: 8
+  enemyType: 0

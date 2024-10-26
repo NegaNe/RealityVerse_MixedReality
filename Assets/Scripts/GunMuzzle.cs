@@ -4,18 +4,6 @@ using Oculus.Haptics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pistol : GunMuzzle 
-{
-    
-}
-public class Shotgun : GunMuzzle 
-{
-    
-}
-public class Rifle : GunMuzzle 
-{
-    
-}
 
 public class GunMuzzle : MonoBehaviour
 {
@@ -23,7 +11,7 @@ public class GunMuzzle : MonoBehaviour
     public float bulletSpeed = 5;
     public float BulletDamage;
     private bool IsFiring;
-    
+    public float BulletDestroyTime=3f;    
     private Transform spawnPoint;
     // Start is called before the first frame update
 
@@ -100,8 +88,10 @@ public class GunMuzzle : MonoBehaviour
             // Apply force to the bullet in the direction of the spawn point's forward direction
             rb.velocity = spawnPoint.forward * bulletSpeed;
 
+            GameController.Instance.audioSource.PlayOneShot(GameController.Instance.RifleSound);
             // Optional: Destroy the bullet after some time to avoid cluttering the scene
-            Destroy(bulletInstance, 3f);
+            Destroy(bulletInstance, 2f);
+
 
             yield return new WaitForSeconds(0.1f);
             IsFiring=false;
@@ -129,7 +119,7 @@ public class GunMuzzle : MonoBehaviour
         rb.velocity = spreadDirection * bulletSpeed;
 
         // Optional: Destroy the bullet after some time to avoid cluttering the scene
-        Destroy(bulletInstance, 3f);
+        Destroy(bulletInstance, BulletDestroyTime);
     }
 }
 }
