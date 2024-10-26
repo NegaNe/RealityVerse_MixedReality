@@ -17,7 +17,6 @@ public ButtonUsage buttonType;
 
 public void ButtonLevel(int index)
 {
-
     GameController.Instance.LevelChange(index);
 }
 

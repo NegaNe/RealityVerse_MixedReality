@@ -24,7 +24,7 @@ public class GunManager : MonoBehaviour
     void Start()
     {
         //controllerCast = FindObjectOfType<ControllerCast>();
-
+    
         if(LeftController.layer != LayerMask.NameToLayer("GunDisplay"))
         LeftHandControllerData = new GameObject[LeftController.transform.childCount];
         if(RightController.layer != LayerMask.NameToLayer("GunDisplay"))

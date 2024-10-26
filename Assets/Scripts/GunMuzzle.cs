@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using Oculus.Haptics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[RequireComponent(typeof(AudioSource))]
 
 public class GunMuzzle : MonoBehaviour
 {
+
     public GameObject bulletPrefab;
     public float bulletSpeed = 5;
     public float BulletDamage;
     private bool IsFiring;
     public float BulletDestroyTime=3f;    
     private Transform spawnPoint;
-    // Start is called before the first frame update
-
-    // Rifle rifle = new Rifle();
+    private AudioSource audiosrc;
 
     public enum FireType
     {
@@ -35,6 +36,18 @@ public class GunMuzzle : MonoBehaviour
     [SerializeField]
     private WeaponPos weaponPos;
     // Update is called once per frame
+
+
+    void Start()
+    {
+        audiosrc = GetComponent<AudioSource>();
+        audiosrc.playOnAwake=false;
+        audiosrc.spatialBlend=1;
+        audiosrc.spatialize=true;
+        audiosrc.maxDistance=10f;
+
+    }
+
     void Update()
     {
         spawnPoint = transform;
@@ -59,6 +72,7 @@ public class GunMuzzle : MonoBehaviour
 
         if(firingType == FireType.Auto){
         if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right)
+        // if(Input.GetKey(KeyCode.Space))
         StartCoroutine(AutoShoot());
         if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
         StartCoroutine(AutoShoot());
@@ -87,14 +101,15 @@ public class GunMuzzle : MonoBehaviour
             
             // Apply force to the bullet in the direction of the spawn point's forward direction
             rb.velocity = spawnPoint.forward * bulletSpeed;
+            audiosrc.PlayOneShot(GameController.Instance.RifleSound);
+            
+            
 
-            GameController.Instance.audioSource.PlayOneShot(GameController.Instance.RifleSound);
             // Optional: Destroy the bullet after some time to avoid cluttering the scene
             Destroy(bulletInstance, 2f);
 
-
             yield return new WaitForSeconds(0.1f);
-            IsFiring=false;
+        IsFiring=false;
     }
 
     void Shotgun()

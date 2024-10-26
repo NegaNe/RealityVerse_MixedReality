@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
     public GameObject LevelSelector;
     public GameObject SummaryMenu;
     public UnityEvent AfterPickLevel;
-    public AudioSource audioSource;
     public AudioClip ShotgunSound;
     public AudioClip RifleSound;
     public AudioClip PisolSound;

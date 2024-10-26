@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Meta.WitAi.Attributes;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
 using UnityEngine;
+using Oculus.Interaction;
 
 public class ControllerCast : MonoBehaviour
 {
@@ -32,6 +33,7 @@ void Update()
 
 void CastRay()
 {
+    Debug.DrawRay(new Vector3(transform.position.x , transform.position.y, transform.position.z+.1f), transform.forward * .05f, Color.red);
     if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, raycastDistance))
     {
         _hitObject = hit.collider.gameObject;
@@ -40,10 +42,8 @@ void CastRay()
 
 void CheckForGunDisplay()
 {
-    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay"))
-    {
-        ChangeGun();
-    }
+    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay") && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+    ChangeGun();
 }
 
 
@@ -73,7 +73,7 @@ void LevelChange()
 try{
     if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, raycastDistance) )
     {
-        if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Button"))
+        if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Button") && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
         {
         rend = _hitObject;
 

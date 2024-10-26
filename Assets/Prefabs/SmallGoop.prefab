@@ -10,8 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.1172614
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
@@ -21,7 +36,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.7519491
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
@@ -57,6 +72,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 593773f6982f8484eadb9097746564b5,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 593773f6982f8484eadb9097746564b5,
         type: 3}
@@ -119,7 +139,7 @@ NavMeshAgent:
   avoidancePriority: 20
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 0
+  m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.36
