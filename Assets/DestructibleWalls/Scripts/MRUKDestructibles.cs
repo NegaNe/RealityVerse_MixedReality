@@ -30,13 +30,19 @@ public class MRUKDestructibles : MonoBehaviour
         {
             if(transform.name.Contains(semantic_classfications +"_EffectMesh"))
             {
-                transform.gameObject.AddComponent<NavMeshObstacle>();
+               NavMeshObstacle ObjectNav = transform.gameObject.AddComponent<NavMeshObstacle>();
+               ObjectNav.carving = true;
+               ObjectNav.size = new Vector3(0.2f,0.2f,0.2f);
             }
+            // if(transform.name.Contains("FLOOR_EffectMesh"))
+            // {
+            // NavMeshLink FloorLink = transform.gameObject.AddComponent<NavMeshLink>();
+            // FloorLink.enabled = true;
+            // }
+
         }
-            if(Semantics.Contains("floor_effectmesh"))
-            {
-                transform.gameObject.AddComponent<NavMeshModifier>();
-            }
+
+        
 
             if(transform.name.ToLower().Contains("ceiling_effectmesh") || transform.name.ToLower().Contains("wall_face_effectmesh"))
             {

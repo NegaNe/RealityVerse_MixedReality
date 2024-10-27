@@ -7,8 +7,6 @@ public class BulletParticle : MonoBehaviour
     // Start is called before the first frame update
 
         [SerializeField] private float destroyRadius = 0.05f;
-        Collider[] hitColliders;
-
 
     void OnTriggerEnter(Collider collision)
     {
@@ -30,7 +28,7 @@ public class BulletParticle : MonoBehaviour
         if(other.gameObject.CompareTag("Enemy"))
         {
         Destroy(other.gameObject);
-        Destroy(gameObject);
+        // Destroy(gameObject);
         }
     }
 

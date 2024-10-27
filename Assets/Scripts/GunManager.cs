@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 
 
 public class GunManager : MonoBehaviour
 {    
-    public GunManager instance;
+    public static GunManager instance;
     public GameObject[] LeftHandControllerData, RightHandControllerData;
     public GameObject LeftController, RightController;
     public GameObject[] Pistol, Rifle, Shotgun;
     private ControllerCast controllerCast;
     public GameObject ActiveLeft, ActiveRight;
+    public AudioClip ShotgunSound, RifleSound, PistolSound;
+
    public enum WeaponType
     {
         None,
@@ -19,51 +22,64 @@ public class GunManager : MonoBehaviour
         Rifle,
         Shotgun,
     }
-    public WeaponType currentGun = WeaponType.None;
+    [SerializeField]
+    private WeaponType currentGun = WeaponType.None;
 
     void Start()
+{
+    InitializeControllerData(LeftController, ref LeftHandControllerData, ref ActiveLeft);
+    InitializeControllerData(RightController, ref RightHandControllerData, ref ActiveRight);
+}
+
+void Update()
+{
+    ChangeGun(currentGun);
+}
+
+void Awake()
+{
+    if (instance == null)
     {
-        //controllerCast = FindObjectOfType<ControllerCast>();
-    
-        if(LeftController.layer != LayerMask.NameToLayer("GunDisplay"))
-        LeftHandControllerData = new GameObject[LeftController.transform.childCount];
-        if(RightController.layer != LayerMask.NameToLayer("GunDisplay"))
-        RightHandControllerData = new GameObject[RightController.transform.childCount];
-
-        if(LeftController.layer != LayerMask.NameToLayer("GunDisplay")){
-        for (int i=0 ; i < LeftController.transform.childCount ; i++) {
-        LeftHandControllerData[i] = LeftController.transform.GetChild(i).gameObject;
-        LeftHandControllerData[i].AddComponent<ControllerCast>();
-            }
-        }
-
-        if(RightController.layer != LayerMask.NameToLayer("GunDisplay")){
-        for (int i=0 ; i < RightController.transform.childCount ; i++) {
-        RightHandControllerData[i] = RightController.transform.GetChild(i).gameObject;
-        RightHandControllerData[i].AddComponent<ControllerCast>();
-            }
-        }
-
-
-            for (int i = 0; i < RightController.transform.childCount; i++)
-            {
-                if (RightController.transform.GetChild(i).gameObject.activeInHierarchy)
-                {
-                    ActiveRight = RightController.transform.GetChild(i).gameObject;
-                    break;
-                }
-            }
+        instance = this;
     }
+    else if (instance != this)
+    {
+        Destroy(gameObject);
+    }
+}
+
+void InitializeControllerData(GameObject controller, ref GameObject[] controllerData, ref GameObject activeController)
+{
+    if (controller.layer != LayerMask.NameToLayer("GunDisplay"))
+    {
+        int childCount = controller.transform.childCount;
+        controllerData = new GameObject[childCount];
+        
+        for (int i = 0; i < childCount; i++)
+        {
+            GameObject child = controller.transform.GetChild(i).gameObject;
+            controllerData[i] = child;
+            child.AddComponent<ControllerCast>();
+
+            if (child.activeInHierarchy)
+            {
+                activeController = child;
+            }
+        }
+    }
+}
     
 
     public void ChangeGun(WeaponType newGun)
     {
-        Pistol[0].SetActive(newGun == WeaponType.Pistol);
-        Pistol[1].SetActive(newGun == WeaponType.Pistol);
-        Rifle[0].SetActive(newGun == WeaponType.Rifle);
-        Rifle[1].SetActive(newGun == WeaponType.Rifle);
-        Shotgun[0].SetActive(newGun == WeaponType.Shotgun);
-        Shotgun[1].SetActive(newGun == WeaponType.Shotgun);
+        currentGun = newGun;
+ 
+        Pistol[0].SetActive(currentGun == WeaponType.Pistol);
+        Pistol[1].SetActive(currentGun == WeaponType.Pistol);
+        Rifle[0].SetActive(currentGun == WeaponType.Rifle);
+        Rifle[1].SetActive(currentGun == WeaponType.Rifle);
+        Shotgun[0].SetActive(currentGun == WeaponType.Shotgun);
+        Shotgun[1].SetActive(currentGun == WeaponType.Shotgun);
     }
 
 

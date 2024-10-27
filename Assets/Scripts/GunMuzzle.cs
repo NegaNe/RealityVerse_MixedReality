@@ -52,89 +52,85 @@ public class GunMuzzle : MonoBehaviour
     {
         spawnPoint = transform;
 
-    if(!IsFiring)
-    {
-        if(firingType == FireType.Semi){
+        bool isRightTrigger = OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right;
+        bool isLeftTrigger = OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left;
 
-        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right)
-        SemiShoot();
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
-        SemiShoot();
+        if (isRightTrigger || isLeftTrigger || Input.GetKeyDown(KeyCode.Space))
+        {
+        Debug.Log("Input is In!");
+            switch (firingType)
+            {
+                case FireType.Semi:
+                    SemiShoot();
+                    break;
+                case FireType.Shotgun:
+                    Shotgun();
+                    break;
+                case FireType.Auto:
+                    if (!IsFiring)
+                    {
+                        IsFiring = true;
+                        StartCoroutine(AutoShoot());
+                    }
+                    break;
+            }
         }
-
-        if(firingType == FireType.Shotgun){
-
-        if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right)
-        Shotgun();
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
-        Shotgun();
-        }
-
-        if(firingType == FireType.Auto){
-        if (OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right)
-        // if(Input.GetKey(KeyCode.Space))
-        StartCoroutine(AutoShoot());
-        if (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left)
-        StartCoroutine(AutoShoot());
-        }
-}   
     }
 
     void SemiShoot()
     {
-        // Instantiate the bullet at the spawn point
         GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
         Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
-        
-        // Apply force to the bullet in the direction of the spawn point's forward direction
-        rb.velocity = spawnPoint.forward * bulletSpeed;
 
-        // Optional: Destroy the bullet after some time to avoid cluttering the scene
+        rb.velocity = spawnPoint.forward * bulletSpeed;
+        audiosrc.PlayOneShot(GunManager.instance.PistolSound);
+
+
         Destroy(bulletInstance, 3f);
     }
     IEnumerator AutoShoot()
     {
         IsFiring = true;
 
+        while (true)
+        {
+        audiosrc.PlayOneShot(GunManager.instance.RifleSound);
+
             GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
             
-            // Apply force to the bullet in the direction of the spawn point's forward direction
             rb.velocity = spawnPoint.forward * bulletSpeed;
-            audiosrc.PlayOneShot(GameController.Instance.RifleSound);
-            
-            
-
-            // Optional: Destroy the bullet after some time to avoid cluttering the scene
             Destroy(bulletInstance, 2f);
 
             yield return new WaitForSeconds(0.1f);
-        IsFiring=false;
+
+            if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
+            {
+                IsFiring = false;
+                break;
+            }
+        }
     }
 
     void Shotgun()
 {
-    int pelletCount = 5; // Number of pellets to fire
-    float spreadAngle = 15f; // Cone angle spread
+    int pelletCount = 5; 
+    float spreadAngle = 15f; 
 
     for (int i = 0; i < pelletCount; i++)
     {
-        // Instantiate each pellet at the spawn point
         GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
         Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
-        // Calculate a spread direction within the cone angle
         Vector3 spreadDirection = Quaternion.Euler(
-            Random.Range(-spreadAngle, spreadAngle),
-            Random.Range(-spreadAngle, spreadAngle),
-            0
+            Random.insideUnitSphere * spreadAngle
         ) * spawnPoint.forward;
 
-        // Apply force in the spread direction
         rb.velocity = spreadDirection * bulletSpeed;
 
-        // Optional: Destroy the bullet after some time to avoid cluttering the scene
         Destroy(bulletInstance, BulletDestroyTime);
     }
+        audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
+
 }
 }

@@ -15,8 +15,6 @@ GameObject:
   - component: {fileID: 6078738046404872727}
   - component: {fileID: 5996536749788804885}
   - component: {fileID: 1257792878728560190}
-  - component: {fileID: 3956179815006297912}
-  - component: {fileID: 6402001077902093338}
   m_Layer: 9
   m_Name: TheButton
   m_TagString: Untagged
@@ -1547,40 +1545,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcaba2cc752f232408d2df37026e47ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3956179815006297912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50960290758536604}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8e7ff1cdf4c4e74db00c3684108bc9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EventMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  sortOrder: 20
---- !u!114 &6402001077902093338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50960290758536604}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639f740ebcad32e4880a3e22eea9095c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Renderer: {fileID: 0}
-  NormalMaterial: {fileID: 2100000, guid: 70b500471db3cbf419bda957b17db891, type: 2}
-  PinchMaterial: {fileID: 2100000, guid: 3e239327900968545b5a43b817eb205c, type: 2}
-  Cursor: {fileID: 0}
-  CursorFill: {fileID: 0}
-  DefaultLength: 1
+  LevelIndex: 0
+  buttonType: 0
 --- !u!1 &5768389262710818741
 GameObject:
   m_ObjectHideFlags: 0

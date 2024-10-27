@@ -21,9 +21,6 @@ public class GameController : MonoBehaviour
     public GameObject LevelSelector;
     public GameObject SummaryMenu;
     public UnityEvent AfterPickLevel;
-    public AudioClip ShotgunSound;
-    public AudioClip RifleSound;
-    public AudioClip PisolSound;
 
 
     void Awake()
@@ -38,24 +35,21 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void Update()
+    private void GameState()
     {
-        GameState();
-    }
-
-    private void GameState ()
-    {
-    try{
-        if(EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies)
+        try
         {
-            StartGame=false;
-            SummaryMenu.SetActive(true);
+            if (EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies)
+            {
+                GunManager.instance.ChangeGun(GunManager.WeaponType.None);
+                StartGame = false;
+                SummaryMenu.SetActive(true);
+            }
         }
-    }
-    catch
-    {
-    return;
-    }
+        catch
+        {
+            return;
+        }
     }
 
     private int CountEnemy()

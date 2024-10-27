@@ -7,31 +7,6 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-
-public class Goop
-{
-    public int Health = 20;
-    public int AttackDmg = 8;
-    public float Speed=.4f;
-
-}
-
-public class BigGoop
-{
-    public int Health = 65;
-    public int AttackDmg = 20;
-    public float Speed=.2f;
-
-}
-
-public class FlyingGoop
-{
-    public int Health = 15;
-    public int AttackDmg = 3;
-    public float Speed=.4f;
-
-}
-
 public class EnemyGoop : MonoBehaviour
 {
 
@@ -41,15 +16,12 @@ public class EnemyGoop : MonoBehaviour
     private int AttackDmg;
 [SerializeField]
     private float Speed;
-    private Goop goop = new Goop();
-    private BigGoop bigGoop = new BigGoop();
-    private FlyingGoop flyingGoop = new FlyingGoop();
+    public  GoopData goopData, bigGoopData, flyingGoop;
     public UnityEvent OnDeath;
     public UnityEvent OnSpawn;
     public float wanderRadius = 5f; 
     public float detectionRadius = 15f; 
-    public float chaseSpeed = 0;
-    public float wanderSpeed = 0;
+
     public float proximityDuration = 5f; 
     public float wanderDistanceFromPlayer = 10f; 
     private NavMeshAgent agent;
@@ -65,6 +37,7 @@ public class EnemyGoop : MonoBehaviour
     BigGoop,
     FlyingGoop
     }
+
     public EnemyType enemyType;
 
     void Start()
@@ -80,28 +53,22 @@ public class EnemyGoop : MonoBehaviour
     switch (enemyType)
     {
     case EnemyType.Goop:
-        Health = goop.Health;
-        AttackDmg = goop.AttackDmg;
-        Speed = goop.Speed;
+        Health = goopData.Health;
+        AttackDmg = goopData.Damage;
+        Speed = goopData.Speed;
     break;
     case EnemyType.BigGoop:
-        Health = bigGoop.Health;
-        AttackDmg = bigGoop.AttackDmg;
-        Speed = bigGoop.Speed;
+        Health = bigGoopData.Health;
+        AttackDmg = bigGoopData.Damage;
+        Speed = bigGoopData.Speed;
     break;
     case EnemyType.FlyingGoop:
         Health = flyingGoop.Health;
-        AttackDmg = flyingGoop.AttackDmg;
+        AttackDmg = flyingGoop.Damage;
         Speed = flyingGoop.Speed;
     break;
     }
 
-
-    }
-
-        void Awake()
-    {
-        OnSpawn.Invoke();
     }
 
     void Update()
@@ -118,29 +85,38 @@ public class EnemyGoop : MonoBehaviour
         DetectPlayer();
     }
 
+void WanderTowardsPlayer()
+{
+    if (player == null) return; // Ensure the player reference exists
 
+    // Generate a random direction around the player within wanderRadius
+    Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+    randomDirection += player.transform.position;
 
-
-
-
-    void WanderTowardsPlayer()
+    // Sample a valid NavMesh position near the random direction
+    NavMeshHit hit;
+    if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, NavMesh.AllAreas))
     {
-        Vector3 randomDirection = Random.insideUnitSphere * wanderDistanceFromPlayer;
-        randomDirection += player.transform.position;  
-         NavMeshHit hit;
-        NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, 1);
         wanderTarget = hit.position;
-        agent.speed = wanderSpeed;
-
+        agent.speed = Speed;
         agent.SetDestination(wanderTarget);
     }
-
-
-    void WanderAroundPlayer()
+    else
     {
-        if (Vector3.Distance(transform.position, wanderTarget) <= agent.stoppingDistance)
-            WanderTowardsPlayer();  
+        // If a valid position is not found, call this method again
+        WanderTowardsPlayer();
     }
+}
+
+void WanderAroundPlayer()
+{
+    // Check if the enemy has reached wanderTarget; if so, generate a new one
+    if (Vector3.Distance(transform.position, wanderTarget) <= agent.stoppingDistance)
+    {
+        WanderTowardsPlayer();
+    }
+}
+
 
     void DetectPlayer()
     {
@@ -173,7 +149,7 @@ public class EnemyGoop : MonoBehaviour
             }
         }
 
-        agent.speed = chaseSpeed;
+        agent.speed = Speed;
         agent.SetDestination(player.transform.position);
 
         if (Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance)

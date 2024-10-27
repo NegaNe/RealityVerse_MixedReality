@@ -25,4 +25,8 @@ public void ReloadLevel()
     SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
 }
 
+    internal object TryGetComponent<T>()
+    {
+        throw new NotImplementedException();
+    }
 }
