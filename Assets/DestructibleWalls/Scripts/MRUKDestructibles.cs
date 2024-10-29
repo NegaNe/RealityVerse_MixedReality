@@ -12,7 +12,14 @@ public class MRUKDestructibles : MonoBehaviour
 {
     public GameObject PrefabToInstantiate;
     private string Semantics;
-    private readonly string[] Classifications = {"WALL_ART", "WALL_FACE", "WINDOW_FRAME", "COUCH", "TABLE", "BED", "LAMP", "PLANT", "SCREEN", "STORAGE", "OTHER"} ;
+
+    public GameObject jumpableObject;  // Reference to the jumpable object prefab or GameObject
+    public Transform startPoint;       // Position where the agent starts the jump
+    public Transform endPoint;         // Position where the agent lands after the jump
+
+    private List<NavMeshLinkInstance> linkInstances = new List<NavMeshLinkInstance>();
+
+    private string[] Classifications = {"WALL_ART", "WINDOW_FRAME", "COUCH", "TABLE", "BED", "LAMP", "PLANT", "SCREEN", "STORAGE", "OTHER"} ;
     
     public void MRUKVonoroiGeneration(){
         GameObject effectMesh = GameObject.Find("GLOBAL_MESH_EffectMesh");
@@ -23,32 +30,49 @@ public class MRUKDestructibles : MonoBehaviour
         Transform[] Transforms = FindObjectsOfType<Transform>();
 
 
-        foreach(Transform transform in Transforms){
-        Semantics = transform.name.ToLower();
-
-        foreach(var semantic_classfications in Classifications)
+      foreach (Transform transform in Transforms)
         {
-            if(transform.name.Contains(semantic_classfications +"_EffectMesh"))
+            Semantics = transform.name.ToLower();
+
+            foreach (var classification in Classifications)
             {
-               NavMeshObstacle ObjectNav = transform.gameObject.AddComponent<NavMeshObstacle>();
-               ObjectNav.carving = true;
-               ObjectNav.size = new Vector3(0.2f,0.2f,0.2f);
+                if (transform.name.Contains(classification + "_EffectMesh"))
+                {
+                    // Add NavMeshObstacle to the object
+                    NavMeshObstacle obstacle = transform.gameObject.AddComponent<NavMeshObstacle>();
+                    obstacle.carving = true;
+
+                    // Get the bounds of the object to determine link positions
+                    Bounds bounds = transform.GetComponent<Renderer>().bounds;
+
+                    // Define start and end positions based on bounds
+                    Vector3 startPosition = bounds.center + Vector3.left * bounds.extents.x; // Left edge
+                    Vector3 endPosition = bounds.center + Vector3.right * bounds.extents.x;  // Right edge
+
+                    // Create and configure NavMeshLinkData
+                    NavMeshLinkData linkData = new NavMeshLinkData
+                    {
+                        startPosition = startPosition,
+                        endPosition = endPosition,
+                        width = bounds.size.z, // Adjust link width to fit the object
+                        costModifier = -1,    // Default cost
+                        bidirectional = true, // Allow both directions if desired
+                        area = 0              // Default area (Walkable)
+                    };
+
+                    // Add the link to the NavMesh and track the instance
+                    NavMeshLinkInstance linkInstance = NavMesh.AddLink(linkData, transform.position, transform.rotation);
+                    linkInstances.Add(linkInstance);
+
+                    Debug.Log("NavMeshLink created for object: " + transform.name);
+                }
             }
-            // if(transform.name.Contains("FLOOR_EffectMesh"))
-            // {
-            // NavMeshLink FloorLink = transform.gameObject.AddComponent<NavMeshLink>();
-            // FloorLink.enabled = true;
-            // }
-
-        }
-
-        
-
             if(transform.name.ToLower().Contains("ceiling_effectmesh") || transform.name.ToLower().Contains("wall_face_effectmesh"))
             {
                 transform.gameObject.AddComponent<MRUKDestroyWalls>();
             }
         }
+        }
 
     }
-}
+

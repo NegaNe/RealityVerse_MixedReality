@@ -49,7 +49,7 @@ void CastRay()
 
 void CheckForGunDisplay()
 {
-    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay"))
+    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay") && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
     ChangeGun();
 }
 
@@ -58,7 +58,8 @@ void ChangeGun() //change gun from here, raycast take, raycast send data.
 {
     GameController.Instance.GunTaken=true;
     GameController.Instance.StartGame=true;
-
+if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger))
+{
     switch (_hitObject.transform.gameObject.tag)
         {
     case "DisplayPistol":
@@ -71,12 +72,9 @@ void ChangeGun() //change gun from here, raycast take, raycast send data.
     case "DisplayShotgun":
         GunManager.instance.ChangeGun(GunManager.WeaponType.Shotgun);
         break;
+                }
             }
         }
-
-
-
-
 
 void LevelChange() //self-explanatory
 {
@@ -84,7 +82,7 @@ void LevelChange() //self-explanatory
     {
         var button = hit.collider.gameObject.GetComponent<ButtonScript>();
 
-    if(OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger)){
+    if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger)){
         if (button.buttonType == ButtonScript.ButtonUsage.Changelevel)
         {
             button.ButtonLevel(button.LevelIndex);
@@ -93,7 +91,7 @@ void LevelChange() //self-explanatory
         {
             button.ReloadLevel();
             rend = hit.collider.gameObject;
-            rend.GetComponent<Renderer>().material.color = OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) ? Color.green : OriginalColor;
+            rend.GetComponent<Renderer>().material.color = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) ? Color.green : OriginalColor;
         }
         }
     }

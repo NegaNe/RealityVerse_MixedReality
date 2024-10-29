@@ -15,9 +15,22 @@ public enum ButtonUsage
 }
 public ButtonUsage buttonType;
 
+void Update()
+{
+    
+}
+
 public void ButtonLevel(int index)
 {
-    GameController.Instance.LevelChange(index);
+    if(index==-1)
+    {
+        GameController.Instance.RestartGame();
+    }
+    else
+    {
+        GameController.Instance.LevelChange(index);
+
+    }
 }
 
 public void ReloadLevel()
@@ -25,8 +38,4 @@ public void ReloadLevel()
     SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
 }
 
-    internal object TryGetComponent<T>()
-    {
-        throw new NotImplementedException();
-    }
 }

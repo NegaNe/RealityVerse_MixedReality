@@ -31,8 +31,7 @@ public class GunMuzzle : MonoBehaviour
     Right
     }
 
-    [SerializeField]
-    private FireType firingType;
+    public FireType firingType;
     [SerializeField]
     private WeaponPos weaponPos;
     // Update is called once per frame
@@ -48,34 +47,35 @@ public class GunMuzzle : MonoBehaviour
 
     }
 
-    void Update()
+void Update()
+{
+    spawnPoint = transform;
+
+    // For semi and shotgun firing
+    if ((OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
+        (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
+        Input.GetKeyDown(KeyCode.Space))
     {
-        spawnPoint = transform;
-
-        bool isRightTrigger = OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right;
-        bool isLeftTrigger = OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left;
-
-        if (isRightTrigger || isLeftTrigger || Input.GetKeyDown(KeyCode.Space))
+        if (firingType == FireType.Semi)
         {
-        Debug.Log("Input is In!");
-            switch (firingType)
-            {
-                case FireType.Semi:
-                    SemiShoot();
-                    break;
-                case FireType.Shotgun:
-                    Shotgun();
-                    break;
-                case FireType.Auto:
-                    if (!IsFiring)
-                    {
-                        IsFiring = true;
-                        StartCoroutine(AutoShoot());
-                    }
-                    break;
-            }
+            SemiShoot();
+        }
+        else if (firingType == FireType.Shotgun)
+        {
+            Shotgun();
         }
     }
+
+    // For automatic firing only
+    if (firingType == FireType.Auto && !IsFiring &&
+        ((OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
+         (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
+         Input.GetKey(KeyCode.Space)))
+    {
+        StartCoroutine(AutoShoot());
+    }
+}
+
 
     void SemiShoot()
     {
@@ -84,8 +84,6 @@ public class GunMuzzle : MonoBehaviour
 
         rb.velocity = spawnPoint.forward * bulletSpeed;
         audiosrc.PlayOneShot(GunManager.instance.PistolSound);
-
-
         Destroy(bulletInstance, 3f);
     }
     IEnumerator AutoShoot()
@@ -94,7 +92,7 @@ public class GunMuzzle : MonoBehaviour
 
         while (true)
         {
-        audiosrc.PlayOneShot(GunManager.instance.RifleSound);
+        audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
 
             GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
@@ -102,10 +100,11 @@ public class GunMuzzle : MonoBehaviour
             rb.velocity = spawnPoint.forward * bulletSpeed;
             Destroy(bulletInstance, 2f);
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.3f);
 
             if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {
+                StopAllCoroutines();
                 IsFiring = false;
                 break;
             }
@@ -114,7 +113,7 @@ public class GunMuzzle : MonoBehaviour
 
     void Shotgun()
 {
-    int pelletCount = 5; 
+    int pelletCount = 3; 
     float spreadAngle = 15f; 
 
     for (int i = 0; i < pelletCount; i++)

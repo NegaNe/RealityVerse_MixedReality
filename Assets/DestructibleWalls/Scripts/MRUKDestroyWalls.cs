@@ -38,4 +38,9 @@ public class MRUKDestroyWalls : MonoBehaviour
         if(meshRenderer!=null) meshRenderer.enabled=false;
         if(meshCollider!=null) meshCollider.enabled=false;
     }
+
+    void OnDestroy()
+    {
+        
+    }
 }
