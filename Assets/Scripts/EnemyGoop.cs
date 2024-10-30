@@ -11,8 +11,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(AudioSource), typeof(NavMeshAgent))]
 public class EnemyGoop : MonoBehaviour
 {
-    [SerializeField]
-    private int Health;
+    public float Health;
     [SerializeField]
     private int AttackDmg;
     [SerializeField]
@@ -58,6 +57,11 @@ public class EnemyGoop : MonoBehaviour
 
     void Update()
     {
+        if(Health<=0)
+        {
+        Destroy(gameObject);
+        }
+
         if (isChasing)
         {
             ChasePlayer();

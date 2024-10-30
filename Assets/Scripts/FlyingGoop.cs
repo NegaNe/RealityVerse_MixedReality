@@ -13,7 +13,7 @@ public class FlyingGoop : MonoBehaviour
     public GoopData FlyingGoopData;   // ScriptableObject or data class containing Speed and Health
 
     private float speed;
-    private float health;
+    public float health;
 
     private NavMeshAgent agent;
     private GameObject player;

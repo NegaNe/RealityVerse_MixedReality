@@ -35,7 +35,7 @@ public class BulletParticle : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Destructible"))
         {
-            gameObject.SetActive(false); 
+            Destroy(collision.gameObject);
         }
     }
 
@@ -43,8 +43,15 @@ public class BulletParticle : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject); 
-            gameObject.SetActive(false); 
+            try{
+            other.gameObject.GetComponent<EnemyGoop>().Health -=GunManager.instance.GunDamage;
+            other.gameObject.GetComponent<FlyingGoop>().health-=GunManager.instance.GunDamage;
+            gameObject.SetActive(false);
+            }
+            catch
+            {
+            return;
+            } 
         }
     }
 }

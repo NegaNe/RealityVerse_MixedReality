@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 2769039581608984096, guid: ccac580bcd60e744a99079724abb4acd,
         type: 3}
       propertyPath: m_Name
-      value: FlyingGoop Variant
+      value: FlyingGoopDesert
       objectReference: {fileID: 0}
     - target: {fileID: 8758987280546786922, guid: ccac580bcd60e744a99079724abb4acd,
         type: 3}
@@ -26,7 +26,7 @@ PrefabInstance:
     - target: {fileID: 8758987280546786922, guid: ccac580bcd60e744a99079724abb4acd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8758987280546786922, guid: ccac580bcd60e744a99079724abb4acd,
         type: 3}

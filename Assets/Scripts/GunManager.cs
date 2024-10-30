@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Meta.XR.MRUtilityKit;
 using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -11,9 +12,10 @@ public class GunManager : MonoBehaviour
     public GameObject[] LeftHandControllerData, RightHandControllerData;
     public GameObject LeftController, RightController;
     public GameObject[] Pistol, Rifle, Shotgun;
-    private ControllerCast controllerCast;
+    public float GunDamage;
     public GameObject ActiveLeft, ActiveRight;
     public AudioClip ShotgunSound, RifleSound, PistolSound;
+    public GunData RifleData, ShotgunData, PistolData;
 
    public enum WeaponType
     {
@@ -29,6 +31,20 @@ public class GunManager : MonoBehaviour
 {
     InitializeControllerData(LeftController, ref LeftHandControllerData, ref ActiveLeft);
     InitializeControllerData(RightController, ref RightHandControllerData, ref ActiveRight);
+
+    switch (currentGun)
+    {
+    case WeaponType.Pistol:
+    GunDamage = PistolData.GunDamage;
+    break;
+    case WeaponType.Rifle:
+    GunDamage = RifleData.GunDamage;
+    break;
+    case WeaponType.Shotgun:
+    GunDamage = ShotgunData.GunDamage;
+    break;
+    }
+
 }
 
 void Update()
