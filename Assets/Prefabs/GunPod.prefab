@@ -857,7 +857,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.000000007450581, y: 0, z: -0.0000000063743855}
-  m_LocalScale: {x: 0.3, y: 0.75, z: 0.3}
+  m_LocalScale: {x: 0.6, y: 1.35, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2990580514614882981}
@@ -1256,7 +1256,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 90
+  m_VersionIndex: 99
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1313,7 +1313,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 63d7ea3dacca0bc43b3eb2974295e379, type: 2}
+  - {fileID: 2100000, guid: b77a4153d6f7fdc4ab6d8f7e1655c9b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

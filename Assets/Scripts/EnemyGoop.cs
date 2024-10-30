@@ -16,9 +16,7 @@ public class EnemyGoop : MonoBehaviour
     private int AttackDmg;
 [SerializeField]
     private float Speed;
-    public  GoopData goopData, bigGoopData, flyingGoop;
-    public UnityEvent OnDeath;
-    public UnityEvent OnSpawn;
+    public  GoopData goopData, bigGoopData;
     public float wanderRadius = 5f; 
     public float detectionRadius = 15f; 
 
@@ -34,8 +32,7 @@ public class EnemyGoop : MonoBehaviour
     public enum EnemyType
     {
     Goop,
-    BigGoop,
-    FlyingGoop
+    BigGoop
     }
 
     public EnemyType enemyType;
@@ -46,7 +43,25 @@ public class EnemyGoop : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         InitStats();
         WanderTowardsPlayer(); 
+        
     }
+
+    void Update()
+    {
+        if (isChasing)
+        {
+            ChasePlayer();
+        }
+        else 
+        {
+            WanderAroundPlayer();
+            
+        }
+
+        DetectPlayer();
+    }
+
+
 
     private void InitStats()
     {
@@ -62,28 +77,10 @@ public class EnemyGoop : MonoBehaviour
         AttackDmg = bigGoopData.Damage;
         Speed = bigGoopData.Speed;
     break;
-    case EnemyType.FlyingGoop:
-        Health = flyingGoop.Health;
-        AttackDmg = flyingGoop.Damage;
-        Speed = flyingGoop.Speed;
-    break;
     }
 
     }
 
-    void Update()
-    {
-        if (isChasing)
-        {
-            ChasePlayer();
-        }
-        else 
-        {
-            WanderAroundPlayer();
-        }
-
-        DetectPlayer();
-    }
 
 void WanderTowardsPlayer()
 {
@@ -158,16 +155,30 @@ void WanderAroundPlayer()
             if (proximityTimer >= proximityDuration)
             {
                 isChasing = false;
-                WanderTowardsPlayer();  
+                // WanderTowardsPlayer();  
             }
+            
+
         }
     }
 
+    
     void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
         {
         Destroy(other.gameObject);
+        }
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if(enemyType == EnemyType.Goop)
+            {
+                GameController.Instance.PlayerHealth-=1;
+            }
+                if(enemyType == EnemyType.BigGoop)
+            {
+                GameController.Instance.PlayerHealth-=5;
+            }
         }
     }
     
@@ -182,4 +193,6 @@ void WanderAroundPlayer()
         EnemySpawner.instance.KilledCounter();
         EnemySpawner.instance.NegateCounter();
     }
+
+
 }

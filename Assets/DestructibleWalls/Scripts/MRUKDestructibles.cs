@@ -67,6 +67,11 @@ public class MRUKDestructibles : MonoBehaviour
                     Debug.Log("NavMeshLink created for object: " + transform.name);
                 }
             }
+            if(transform.name.ToLower().Contains("floor_effectmesh"))
+            {
+                transform.gameObject.layer = LayerMask.NameToLayer("NonDestructible");
+            }
+
             if(transform.name.ToLower().Contains("ceiling_effectmesh") || transform.name.ToLower().Contains("wall_face_effectmesh"))
             {
                 transform.gameObject.AddComponent<MRUKDestroyWalls>();
