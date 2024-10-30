@@ -6,99 +6,128 @@ using UnityEngine;
 using UnityEngine.Scripting;
 
 [RequireComponent(typeof(AudioSource))]
-
 public class GunMuzzle : MonoBehaviour
 {
-
     public GameObject bulletPrefab;
     public float bulletSpeed = 5;
     public float BulletDamage;
     private bool IsFiring;
-    public float BulletDestroyTime=3f;    
+    public float BulletDestroyTime = 3f;
     private Transform spawnPoint;
     private AudioSource audiosrc;
 
+    private List<GameObject> bulletPool = new List<GameObject>();
+    public int poolSize = 10; 
+
     public enum FireType
     {
-    Semi,
-    Auto,
-    Shotgun
+        Semi,
+        Auto,
+        Shotgun
     }
 
     public enum WeaponPos
     {
-    Left,
-    Right
+        Left,
+        Right
     }
 
     public FireType firingType;
     [SerializeField]
     private WeaponPos weaponPos;
-    // Update is called once per frame
-
 
     void Start()
     {
         audiosrc = GetComponent<AudioSource>();
-        audiosrc.playOnAwake=false;
-        audiosrc.spatialBlend=1;
-        audiosrc.spatialize=true;
-        audiosrc.maxDistance=10f;
+        audiosrc.playOnAwake = false;
+        audiosrc.spatialBlend = 1;
+        audiosrc.spatialize = true;
+        audiosrc.maxDistance = 10f;
 
+        InitializeBulletPool();
     }
 
-void Update()
-{
-    spawnPoint = transform;
-
-    // For semi and shotgun firing
-    if ((OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
-        (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
-        Input.GetKeyDown(KeyCode.Space))
+    void Update()
     {
-        if (firingType == FireType.Semi)
+        spawnPoint = transform;
+
+        if ((OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
+            (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
+            Input.GetKeyDown(KeyCode.Space))
         {
-            SemiShoot();
+            if (firingType == FireType.Semi)
+            {
+                SemiShoot();
+            }
+            else if (firingType == FireType.Shotgun)
+            {
+                Shotgun();
+            }
         }
-        else if (firingType == FireType.Shotgun)
+        if (firingType == FireType.Auto && !IsFiring &&
+            ((OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
+             (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
+             Input.GetKey(KeyCode.Space)))
         {
-            Shotgun();
+            StartCoroutine(AutoShoot());
         }
     }
 
-    // For automatic firing only
-    if (firingType == FireType.Auto && !IsFiring &&
-        ((OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && weaponPos == WeaponPos.Right) ||
-         (OVRInput.Get(OVRInput.RawButton.LIndexTrigger) && weaponPos == WeaponPos.Left) ||
-         Input.GetKey(KeyCode.Space)))
+    void InitializeBulletPool()
     {
-        StartCoroutine(AutoShoot());
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject bullet = Instantiate(bulletPrefab, transform.parent);
+            bullet.SetActive(false);
+            bulletPool.Add(bullet);
+        }
     }
-}
 
+    GameObject GetBulletFromPool()
+    {
+        foreach (GameObject bullet in bulletPool)
+        {
+            if (!bullet.activeInHierarchy)
+            {
+                bullet.SetActive(true);
+                return bullet;
+            }
+        }
+
+        GameObject newBullet = Instantiate(bulletPrefab);
+        newBullet.SetActive(true);
+        bulletPool.Add(newBullet);
+        return newBullet;
+    }
 
     void SemiShoot()
     {
-        GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+        GameObject bulletInstance = GetBulletFromPool();
+        bulletInstance.transform.position = spawnPoint.position;
+        bulletInstance.transform.rotation = spawnPoint.rotation;
         Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
         rb.velocity = spawnPoint.forward * bulletSpeed;
         audiosrc.PlayOneShot(GunManager.instance.PistolSound);
-        Destroy(bulletInstance, 3f);
+
+        StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
     }
+
     IEnumerator AutoShoot()
     {
         IsFiring = true;
 
         while (true)
         {
-        audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
+            audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
 
-            GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject bulletInstance = GetBulletFromPool();
+            bulletInstance.transform.position = spawnPoint.position;
+            bulletInstance.transform.rotation = spawnPoint.rotation;
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
-            
+
             rb.velocity = spawnPoint.forward * bulletSpeed;
-            Destroy(bulletInstance, 2f);
+            StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
 
             yield return new WaitForSeconds(0.3f);
 
@@ -112,24 +141,30 @@ void Update()
     }
 
     void Shotgun()
-{
-    int pelletCount = 3; 
-    float spreadAngle = 15f; 
-
-    for (int i = 0; i < pelletCount; i++)
     {
-        GameObject bulletInstance = Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
-        Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
+        int pelletCount = 3;
+        float spreadAngle = 15f;
 
-        Vector3 spreadDirection = Quaternion.Euler(
-            Random.insideUnitSphere * spreadAngle
-        ) * spawnPoint.forward;
+        for (int i = 0; i < pelletCount; i++)
+        {
+            GameObject bulletInstance = GetBulletFromPool();
+            bulletInstance.transform.position = spawnPoint.position;
+            bulletInstance.transform.rotation = spawnPoint.rotation;
+            Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
-        rb.velocity = spreadDirection * bulletSpeed;
+            Vector3 spreadDirection = Quaternion.Euler(
+                Random.insideUnitSphere * spreadAngle
+            ) * spawnPoint.forward;
 
-        Destroy(bulletInstance, BulletDestroyTime);
-    }
+            rb.velocity = spreadDirection * bulletSpeed;
+            StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
+        }
+
         audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
-
-}
+    }
+    IEnumerator DeactivateBulletAfterTime(GameObject bullet, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        bullet.SetActive(false);
+    }
 }

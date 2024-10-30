@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class FlyingGoop : MonoBehaviour
 {
     public GameObject bulletPrefab;
@@ -36,33 +38,34 @@ public class FlyingGoop : MonoBehaviour
             return;
         }
 
-        // Set the agent's speed based on FlyingGoopData
         agent.speed = speed;
         shootingDistance = agent.stoppingDistance + 1;
 
-        // Start the dodge coroutine
+        
+
         StartCoroutine(DodgeRoutine());
     }
 
     void Update()
     {
-        if (player == null) return;
 
-        // Set agent destination to the player's position if not dodging
+        if (player == null) return;
         if (!isDodging)
         {
             agent.SetDestination(player.transform.position);
         }
 
-        // Smoothly rotate to face the player
         Vector3 lookPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
         transform.LookAt(player.transform.position);
-
-        // Check if within shooting range and if the agent has stopped
         if (!isShooting && agent.remainingDistance <= shootingDistance)
         {
             agent.isStopped = true;
             StartCoroutine(ShootAtPlayer());
+        }
+
+        if(health<=0)
+        {
+        Destroy(gameObject);
         }
     }
 
@@ -72,6 +75,7 @@ public class FlyingGoop : MonoBehaviour
 
         while (Vector3.Distance(transform.position, player.transform.position) <= shootingDistance)
         {
+            AudioSource.PlayClipAtPoint(GunManager.instance.PistolSound, transform.position);
             GameObject bulletInstance = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
@@ -96,7 +100,7 @@ public class FlyingGoop : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0.5f, 2f)); // Wait a random time up to 2 seconds
+            yield return new WaitForSeconds(Random.Range(0.5f, 2f));
 
             if (!isDodging && CanDodge())
             {
@@ -107,29 +111,25 @@ public class FlyingGoop : MonoBehaviour
 
     private bool CanDodge()
     {
-        // Check for obstacles in the dodge direction
         Vector3 dodgeDirection = Random.value > 0.5f ? transform.right : -transform.right;
-        Vector3 dodgeTarget = transform.position + dodgeDirection * 2f;  // Adjust dodge distance as needed
+        Vector3 dodgeTarget = transform.position + dodgeDirection * 2f; 
 
-        // Raycast to check for obstacles
         if (Physics.Raycast(transform.position, dodgeDirection, 2f, obstacleLayer))
         {
-            return false; // Obstacle detected, cannot dodge
+            return false; 
         }
 
-        return true; // No obstacles detected, can dodge
+        return true; 
     }
 
     private IEnumerator Dodge()
     {
         isDodging = true;
 
-        // Pick a random dodge direction (left or right)
         Vector3 dodgeDirection = Random.value > 0.5f ? transform.right : -transform.right;
-        Vector3 dodgeTarget = transform.position + dodgeDirection * 2f;  // Adjust dodge distance as needed
+        Vector3 dodgeTarget = transform.position + dodgeDirection * 2f;  
 
-        // Smooth dodge over time with Lerp
-        float dodgeDuration = 0.5f;  // Duration for dodge to complete
+        float dodgeDuration = 0.5f;  
         float elapsed = 0f;
         Vector3 startPosition = transform.position;
 
@@ -139,8 +139,6 @@ public class FlyingGoop : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-
-        // Reset dodging status
         isDodging = false;
     }
 
@@ -156,5 +154,11 @@ public class FlyingGoop : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        EnemySpawner.instance.KilledCounter();
+        EnemySpawner.instance.NegateCounter();
     }
 }

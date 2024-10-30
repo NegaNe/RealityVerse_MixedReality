@@ -12,7 +12,7 @@ public class ControllerCast : MonoBehaviour
 
     [SerializeField]
     private GameObject rend;
-    readonly float raycastDistance = 0.4f;
+    readonly float raycastDistance = 1f;
     private GameObject _hitObject;
     private Color OriginalColor;
 
@@ -33,6 +33,8 @@ public class ControllerCast : MonoBehaviour
 
 void Update()
 {
+    Debug.DrawRay(transform.position, transform.forward * raycastDistance, Color.red);
+
     CastRay();
     LevelChange();
     CheckForGunDisplay();
@@ -40,7 +42,6 @@ void Update()
 
 void CastRay()
 {
-    Debug.DrawRay(new Vector3(transform.position.x , transform.position.y, transform.position.z+.1f), transform.forward * .05f, Color.red);
     if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, raycastDistance))
     {
         _hitObject = hit.collider.gameObject;

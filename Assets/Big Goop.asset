@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Big Goop
   m_EditorClassIdentifier: 
   Health: 65
-  Damage: 20
-  Speed: 0.2
+  Damage: 10
+  Speed: 0.1

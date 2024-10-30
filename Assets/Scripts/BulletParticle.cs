@@ -1,35 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+
 public class BulletParticle : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private float destroyRadius = 0.05f;
+    private TrailRenderer trailRenderer;
 
-        [SerializeField] private float destroyRadius = 0.05f;
-
-    void OnTriggerEnter(Collider collision)
+    void Awake()
     {
 
-          if (collision.gameObject.layer == LayerMask.NameToLayer("Destructible"))
-          {
-              //GameObject debrisPrefab = debrisPrefabs[Random.Range(0, debrisPrefabs.Count)];
-              //GameObject debris = Instantiate(debrisPrefab, hit.point, Quaternion.identity);
-              Destroy(collision.gameObject);
-              //Destroy(debris, 3f);
+        trailRenderer = GetComponent<TrailRenderer>();
+    }
 
-              //AudioSource.PlayClipAtPoint(hitSound, hit.point);
-           }
-      }
-    
-
-    void OnCollisionEnter(Collision other)
+    void OnEnable()
     {
-        if(other.gameObject.CompareTag("Enemy"))
+ 
+        if (trailRenderer != null)
         {
-        Destroy(other.gameObject);
-        // Destroy(gameObject);
+            trailRenderer.Clear(); 
+            trailRenderer.enabled = true;
         }
     }
 
+    void OnDisable()
+    {
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = false;
+        }
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Destructible"))
+        {
+            gameObject.SetActive(false); 
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(other.gameObject); 
+            gameObject.SetActive(false); 
+        }
+    }
 }

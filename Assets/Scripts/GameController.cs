@@ -7,6 +7,8 @@ using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 using Meta.XR.ImmersiveDebugger.UserInterface.Generic;
 using UnityEngine.Events;
+using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -15,22 +17,26 @@ public class GameController : MonoBehaviour
     [SerializeField]
     public int MaxTotalEnemies;
     public int MaxEnemiesInMap;
-    public TMP_Text EnemiesKilled;
+
+    public AudioClip GoopBounce;
+    public AudioClip GoopAttack;
+    public AudioClip HealSound;
+    public AudioClip RageSound;
+    public Text EnemiesKilled;
     public TMP_Text TimerText;
     public TMP_Text HealthText;
     public TMP_Text EnemiesLeftText;
+    public GameObject[] BuffText;
     public GameObject WinText;
     public GameObject LoseText;
 
     public float PlayerHealth = 100;
-    public float Timer;
+    public float Timer = 300; // set to seconds -> 300s = 5 minutes, 300s * 2 = 600s = 10 minutes
     public bool GunTaken, StartGame;
     public GameObject[] LevelObject;
     public GameObject LevelSelector;
     public GameObject SummaryMenu;
     public GameObject StatsMenu;
-    public UnityEvent AfterPickLevel;
-
     public List<GameObject> DebrisPrefabs;
 
     void Awake()
@@ -47,7 +53,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        EnemiesKilled = GetComponent<TextMeshPro>();
+
     }
 
     void Update()
@@ -61,17 +67,22 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void GameTimer()
-    {
-        Timer += Time.deltaTime;
+private void GameTimer()
+{
+    // Decrease the timer by the time passed since the last frame
+    Timer -= Time.deltaTime;
 
-        // Convert the timer to minutes and seconds
-        int minutes = Mathf.FloorToInt(Timer / 60);
-        int seconds = Mathf.FloorToInt(Timer % 60);
+    // Clamp the Timer to zero to avoid negative time
+    Timer = Mathf.Max(Timer, 0);
 
-        // Format the time and display it on the UI Text
-        TimerText.SetText(string.Format("Time : {0:00}:{1:00}", minutes, seconds) );
-    }
+    // Convert the timer to minutes and seconds
+    int minutes = Mathf.FloorToInt(Timer / 60);
+    int seconds = Mathf.FloorToInt(Timer % 60);
+
+    // Format the time and display it on the UI Text
+    TimerText.SetText(string.Format("Time : {0:00}:{1:00}", minutes, seconds));
+}
+
 
     private void GameState()
     {
@@ -84,7 +95,7 @@ public class GameController : MonoBehaviour
                 SummaryMenu.SetActive(true);
                 WinText.SetActive(true);
                 StatsMenu.SetActive(false);
-                EnemiesKilled.SetText("Enemies Killed : " + EnemySpawner.instance.EnemiesKilled);
+                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
 
             } else if (PlayerHealth <= 0)
             {
@@ -92,15 +103,24 @@ public class GameController : MonoBehaviour
                 StartGame = false;
                 SummaryMenu.SetActive(true);
                 LoseText.SetActive(true);
-
+                EnemySpawner.instance.RemoveAllEnemies();
                 StatsMenu.SetActive(false);
-                EnemiesKilled.SetText("Enemies Killed : " + EnemySpawner.instance.EnemiesKilled);
-
+                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
+                EmptyEnemies();
             }
         }
         catch
         {
             return;
+        }
+    }
+
+    private void EmptyEnemies()
+    {
+        foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+
+            enemy.SetActive(false);
         }
     }
 
@@ -137,5 +157,13 @@ public class GameController : MonoBehaviour
     HealthText.SetText("Health : " + PlayerHealth);
     EnemiesLeftText.SetText(EnemySpawner.instance.EnemiesKilled + " / " + MaxTotalEnemies + " Enemies");
 
+    }
+
+    public void RageEffect(bool state)
+    {
+    foreach(var buffText in BuffText)
+    {
+        buffText.SetActive(state);
+    }
     }
 }

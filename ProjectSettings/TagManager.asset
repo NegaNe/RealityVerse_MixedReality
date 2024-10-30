@@ -9,6 +9,7 @@ TagManager:
   - DisplayRifle
   - DisplayShotgun
   - Spawner
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - NonDestructible
   - GunDisplay
   - Button
-  - 
+  - Obstacles
   - 
   - 
   - 

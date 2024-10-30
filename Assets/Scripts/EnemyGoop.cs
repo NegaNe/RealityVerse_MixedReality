@@ -7,16 +7,17 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+
+[RequireComponent(typeof(AudioSource), typeof(NavMeshAgent))]
 public class EnemyGoop : MonoBehaviour
 {
-
-[SerializeField]
+    [SerializeField]
     private int Health;
-[SerializeField]
+    [SerializeField]
     private int AttackDmg;
-[SerializeField]
+    [SerializeField]
     private float Speed;
-    public  GoopData goopData, bigGoopData;
+    public GoopData goopData, bigGoopData;
     public float wanderRadius = 5f; 
     public float detectionRadius = 15f; 
 
@@ -27,23 +28,32 @@ public class EnemyGoop : MonoBehaviour
     private Vector3 wanderTarget;
     private bool isChasing = false;
     private float proximityTimer = 0f;
+    private AudioSource audiosrc;
 
     [SerializeField]
     public enum EnemyType
     {
-    Goop,
-    BigGoop
+        Goop,
+        BigGoop
     }
 
     public EnemyType enemyType;
 
+    // Animator reference
+    private Animator animator;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>(); // Get the Animator component
         player = GameObject.FindGameObjectWithTag("Player");
         InitStats();
         WanderTowardsPlayer(); 
-        
+
+        audiosrc = GetComponent<AudioSource>();
+        audiosrc.volume = .5f;
+
+
     }
 
     void Update()
@@ -55,65 +65,59 @@ public class EnemyGoop : MonoBehaviour
         else 
         {
             WanderAroundPlayer();
-            
         }
 
         DetectPlayer();
     }
 
-
-
     private void InitStats()
     {
-    switch (enemyType)
+        switch (enemyType)
+        {
+            case EnemyType.Goop:
+                Health = goopData.Health;
+                AttackDmg = goopData.Damage;
+                Speed = goopData.Speed;
+                break;
+            case EnemyType.BigGoop:
+                Health = bigGoopData.Health;
+                AttackDmg = bigGoopData.Damage;
+                Speed = bigGoopData.Speed;
+                break;
+        }
+    }
+
+    void WanderTowardsPlayer()
     {
-    case EnemyType.Goop:
-        Health = goopData.Health;
-        AttackDmg = goopData.Damage;
-        Speed = goopData.Speed;
-    break;
-    case EnemyType.BigGoop:
-        Health = bigGoopData.Health;
-        AttackDmg = bigGoopData.Damage;
-        Speed = bigGoopData.Speed;
-    break;
+        if (player == null) return; // Ensure the player reference exists
+
+        // Generate a random direction around the player within wanderRadius
+        Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
+        randomDirection += player.transform.position;
+
+        // Sample a valid NavMesh position near the random direction
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, NavMesh.AllAreas))
+        {
+            wanderTarget = hit.position;
+            agent.speed = Speed;
+            agent.SetDestination(wanderTarget);
+        }
+        else
+        {
+            // If a valid position is not found, call this method again
+            WanderTowardsPlayer();
+        }
     }
 
-    }
-
-
-void WanderTowardsPlayer()
-{
-    if (player == null) return; // Ensure the player reference exists
-
-    // Generate a random direction around the player within wanderRadius
-    Vector3 randomDirection = Random.insideUnitSphere * wanderRadius;
-    randomDirection += player.transform.position;
-
-    // Sample a valid NavMesh position near the random direction
-    NavMeshHit hit;
-    if (NavMesh.SamplePosition(randomDirection, out hit, wanderRadius, NavMesh.AllAreas))
+    void WanderAroundPlayer()
     {
-        wanderTarget = hit.position;
-        agent.speed = Speed;
-        agent.SetDestination(wanderTarget);
+        // Check if the enemy has reached wanderTarget; if so, generate a new one
+        if (Vector3.Distance(transform.position, wanderTarget) <= agent.stoppingDistance)
+        {
+            WanderTowardsPlayer();
+        }
     }
-    else
-    {
-        // If a valid position is not found, call this method again
-        WanderTowardsPlayer();
-    }
-}
-
-void WanderAroundPlayer()
-{
-    // Check if the enemy has reached wanderTarget; if so, generate a new one
-    if (Vector3.Distance(transform.position, wanderTarget) <= agent.stoppingDistance)
-    {
-        WanderTowardsPlayer();
-    }
-}
-
 
     void DetectPlayer()
     {
@@ -132,56 +136,46 @@ void WanderAroundPlayer()
 
     void ChasePlayer()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, .8f);
-
-        foreach (var hit in hits)
-        {
-            if (hit.gameObject.layer == LayerMask.NameToLayer("Destructible"))
-            {
-                isChasing=false;
-                Destroy(hit.gameObject, .4f); 
-            } else
-            {
-                isChasing=true;
-            }
-        }
-
+        // Set the agent's speed
         agent.speed = Speed;
+
+        // Move towards the player
         agent.SetDestination(player.transform.position);
 
-        if (Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance)
+        // Check if within attack range
+        if (Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance+1)
         {
+            // Stop moving
+            agent.isStopped = true;
+
+            // Change to attack animation
+            animator.SetTrigger("Attack");
+
+
+            // Handle proximity timer
             proximityTimer += Time.deltaTime;
             if (proximityTimer >= proximityDuration)
             {
                 isChasing = false;
-                // WanderTowardsPlayer();  
+                WanderTowardsPlayer();
             }
-            
-
+        }
+        else
+        {
+            // If not within attack range, resume movement
+            animator.SetTrigger("Walk");
+            agent.isStopped = false;
         }
     }
 
-    
     void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
         {
-        Destroy(other.gameObject);
-        }
-        if (other.gameObject.CompareTag("Player"))
-        {
-            if(enemyType == EnemyType.Goop)
-            {
-                GameController.Instance.PlayerHealth-=1;
-            }
-                if(enemyType == EnemyType.BigGoop)
-            {
-                GameController.Instance.PlayerHealth-=5;
-            }
+            Destroy(other.gameObject);
         }
     }
-    
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -194,5 +188,14 @@ void WanderAroundPlayer()
         EnemySpawner.instance.NegateCounter();
     }
 
+    public void AttackPlayer()
+    {
+    AudioSource.PlayClipAtPoint(GameController.Instance.GoopAttack, transform.position);
+        GameController.Instance.PlayerHealth -= AttackDmg;
+    }
 
+    public void BounceSound()
+    {
+    AudioSource.PlayClipAtPoint(GameController.Instance.GoopBounce, transform.position);
+    }
 }
