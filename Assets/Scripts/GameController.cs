@@ -58,6 +58,10 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+    if(Input.GetKeyDown(KeyCode.M))
+    {
+        LevelChange(1);
+    }
         
         GameState();
 

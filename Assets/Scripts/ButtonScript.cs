@@ -17,7 +17,10 @@ public ButtonUsage buttonType;
 
 void Update()
 {
-    
+    if(Input.GetKeyDown(KeyCode.N))
+    {
+    ReloadLevel();
+    }
 }
 
 public void ButtonLevel(int index)
