@@ -129,7 +129,7 @@ public class GunMuzzle : MonoBehaviour
             rb.velocity = spawnPoint.forward * bulletSpeed;
             StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
 
             if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {

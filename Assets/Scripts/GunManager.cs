@@ -32,7 +32,19 @@ public class GunManager : MonoBehaviour
     InitializeControllerData(LeftController, ref LeftHandControllerData, ref ActiveLeft);
     InitializeControllerData(RightController, ref RightHandControllerData, ref ActiveRight);
 
-    switch (currentGun)
+}
+
+void Update()
+{
+
+    ChangeGun(currentGun);
+}
+
+
+void InitGun(WeaponType currGun)
+{
+
+    switch (currGun)
     {
     case WeaponType.Pistol:
     GunDamage = PistolData.GunDamage;
@@ -43,14 +55,7 @@ public class GunManager : MonoBehaviour
     case WeaponType.Shotgun:
     GunDamage = ShotgunData.GunDamage;
     break;
-    }
-
-}
-
-void Update()
-{
-    ChangeGun(currentGun);
-}
+    }}
 
 void Awake()
 {
@@ -89,7 +94,7 @@ void InitializeControllerData(GameObject controller, ref GameObject[] controller
     public void ChangeGun(WeaponType newGun)
     {
         currentGun = newGun;
- 
+        InitGun(newGun);
         Pistol[0].SetActive(currentGun == WeaponType.Pistol);
         Pistol[1].SetActive(currentGun == WeaponType.Pistol);
         Rifle[0].SetActive(currentGun == WeaponType.Rifle);

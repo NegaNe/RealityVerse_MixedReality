@@ -48,12 +48,19 @@ public class FlyingGoop : MonoBehaviour
 
     void Update()
     {
+        if(health<=0)
+        {
+        Destroy(gameObject);
+        }
+
 
         if (player == null) return;
+        try{
         if (!isDodging)
         {
             agent.SetDestination(player.transform.position);
         }
+        } catch{return;}
 
         Vector3 lookPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
         transform.LookAt(player.transform.position);
@@ -63,10 +70,7 @@ public class FlyingGoop : MonoBehaviour
             StartCoroutine(ShootAtPlayer());
         }
 
-        if(health<=0)
-        {
-        Destroy(gameObject);
-        }
+
     }
 
     private IEnumerator ShootAtPlayer()

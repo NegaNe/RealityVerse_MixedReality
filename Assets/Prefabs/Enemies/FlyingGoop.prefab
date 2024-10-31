@@ -460,6 +460,7 @@ GameObject:
   - component: {fileID: 3470587866821791563}
   - component: {fileID: 8069758186450406048}
   - component: {fileID: 4479686594324267705}
+  - component: {fileID: 1308656054199863268}
   m_Layer: 0
   m_Name: FlyingGoop
   m_TagString: Enemy
@@ -519,7 +520,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -569,6 +570,7 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 5831011843310005067}
   shootingInterval: 2
   FlyingGoopData: {fileID: 11400000, guid: ae4f1e9d3da44de49bbd8f69600b3d8b, type: 2}
+  health: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -584,7 +586,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f041be46c7cd7484b86b357bf4d52cf1, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.11
+  m_Volume: 0.288
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -668,3 +670,30 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &1308656054199863268
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7820075294096734627}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 1
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

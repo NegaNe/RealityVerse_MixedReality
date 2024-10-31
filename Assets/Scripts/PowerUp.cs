@@ -32,7 +32,7 @@ void OnDestroy()
     HealthUp();
     break;
     case PowerupType.Damage:
-    DamageUp();
+    GameController.Instance.DamageUp();
     break;
     }
 }
@@ -43,32 +43,8 @@ private void HealthUp()
     GameController.Instance.PlayerHealth+=20;
 }
 
-private void DamageUp()
-{
-    GunMuzzle[] weaponInstances = FindObjectsOfType<GunMuzzle>();
 
-    foreach (var instance in weaponInstances)
-    {
-        // Increase the bullet damage by 20%
-        float originalDamage = instance.BulletDamage;
-        instance.BulletDamage += originalDamage * 0.2f;
-        GameController.Instance.RageEffect(true);
-        AudioSource.PlayClipAtPoint(GameController.Instance.RageSound, transform.position);
 
-        // Start coroutine to reset the damage after 10 seconds
-        StartCoroutine(ResetDamageAfterDelay(instance, originalDamage));
-    }
-}
-
-private IEnumerator ResetDamageAfterDelay(GunMuzzle instance, float originalDamage)
-{
-    // Wait for 10 seconds
-    yield return new WaitForSeconds(10f);
-
-    // Reset the damage to the original value
-    GameController.Instance.RageEffect(false);
-    instance.BulletDamage = originalDamage;
-}
 
 
 

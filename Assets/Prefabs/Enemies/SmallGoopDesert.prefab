@@ -58,10 +58,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1402787695905559332, guid: 683bf157c4b62c84ab5734c17738be77,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 1418566944754522955, guid: 683bf157c4b62c84ab5734c17738be77,
         type: 3}
       propertyPath: m_Name
-      value: SmallGoop Variant
+      value: SmallGoopDesert
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

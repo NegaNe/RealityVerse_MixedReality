@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(AudioSource), typeof(NavMeshAgent))]
 public class EnemyGoop : MonoBehaviour
 {
+    private ParticleSystem destroyParticles;
     public float Health;
     [SerializeField]
     private int AttackDmg;
@@ -43,6 +44,8 @@ public class EnemyGoop : MonoBehaviour
 
     void Start()
     {
+        destroyParticles = GetComponent<ParticleSystem>();
+    
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>(); // Get the Animator component
         player = GameObject.FindGameObjectWithTag("Player");
@@ -57,9 +60,10 @@ public class EnemyGoop : MonoBehaviour
 
     void Update()
     {
+    Debug.Log("enemy health : " + Health);
         if(Health<=0)
         {
-        Destroy(gameObject);
+            Destroy(gameObject);
         }
 
         if (isChasing)
@@ -188,14 +192,27 @@ public class EnemyGoop : MonoBehaviour
 
     void OnDestroy()
     {
+    EnemyParticle();
         EnemySpawner.instance.KilledCounter();
         EnemySpawner.instance.NegateCounter();
+
     }
 
     public void AttackPlayer()
     {
     AudioSource.PlayClipAtPoint(GameController.Instance.GoopAttack, transform.position);
         GameController.Instance.PlayerHealth -= AttackDmg;
+    }
+
+        private void EnemyParticle()
+    {
+        if (destroyParticles != null)
+        {
+            destroyParticles.transform.parent = null;  // Detach the particle system
+            destroyParticles.Play();                   // Play the particle system
+        }
+
+        Destroy(gameObject);  // Destroy the enemy object
     }
 
     public void BounceSound()

@@ -51,10 +51,6 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-
-    }
 
     void Update()
     {
@@ -62,6 +58,7 @@ public class GameController : MonoBehaviour
     {
         LevelChange(1);
     }
+
         
         GameState();
 
@@ -92,16 +89,17 @@ private void GameTimer()
     {
         try
         {
-            if (EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies )
-            {
-                GunManager.instance.ChangeGun(GunManager.WeaponType.None);
-                StartGame = false;
-                SummaryMenu.SetActive(true);
-                WinText.SetActive(true);
-                StatsMenu.SetActive(false);
-                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
+            // if (EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies )
+            // {
+            //     GunManager.instance.ChangeGun(GunManager.WeaponType.None);
+            //     StartGame = false;
+            //     SummaryMenu.SetActive(true);
+            //     WinText.SetActive(true);
+            //     StatsMenu.SetActive(false);
+            //     EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
 
-            } else if (PlayerHealth <= 0)
+            // } 
+            if (PlayerHealth <= 0)
             {
                 GunManager.instance.ChangeGun(GunManager.WeaponType.None);
                 StartGame = false;
@@ -111,6 +109,16 @@ private void GameTimer()
                 StatsMenu.SetActive(false);
                 EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
                 EmptyEnemies();
+            }
+            else if(Timer <=0)
+            {
+                GunManager.instance.ChangeGun(GunManager.WeaponType.None);
+                StartGame = false;
+                SummaryMenu.SetActive(true);
+                WinText.SetActive(true);
+                StatsMenu.SetActive(false);
+                EnemySpawner.instance.RemoveAllEnemies();
+                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
             }
         }
         catch
@@ -170,4 +178,33 @@ private void GameTimer()
         buffText.SetActive(state);
     }
     }
+
+
+    public void DamageUp()
+{
+    GunMuzzle[] weaponInstances = FindObjectsOfType<GunMuzzle>();
+
+    foreach (var instance in weaponInstances)
+    {
+        // Increase the bullet damage by 20%
+        float originalDamage = instance.BulletDamage;
+        instance.BulletDamage += originalDamage * 0.2f;
+        GameController.Instance.RageEffect(true);
+        AudioSource.PlayClipAtPoint(GameController.Instance.RageSound, transform.position);
+
+        // Start coroutine to reset the damage after 10 seconds
+        StartCoroutine(ResetDamageAfterDelay(instance, originalDamage));
+    }
+}
+
+    public IEnumerator ResetDamageAfterDelay(GunMuzzle instance, float originalDamage)
+{
+    // Wait for 10 seconds
+    yield return new WaitForSeconds(10f);
+
+    // Reset the damage to the original value
+    GameController.Instance.RageEffect(false);
+    instance.BulletDamage = originalDamage;
+}
+
 }
