@@ -43,8 +43,8 @@ public class BulletParticle : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-         var enemyGoop = gameObject.GetComponent<EnemyGoop>();
-         var flyingGoop = gameObject.GetComponent<FlyingGoop>();
+         var enemyGoop = other.gameObject.GetComponent<EnemyGoop>();
+         var flyingGoop = other.gameObject.GetComponent<FlyingGoop>();
 
          if(enemyGoop != null)
          {
@@ -56,6 +56,8 @@ public class BulletParticle : MonoBehaviour
             other.gameObject.GetComponent<FlyingGoop>().health -= GunManager.instance.GunDamage;
          
          }
+
+        
         }
     }
 

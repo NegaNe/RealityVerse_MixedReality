@@ -196,6 +196,21 @@ public class EnemyGoop : MonoBehaviour
         EnemySpawner.instance.KilledCounter();
         EnemySpawner.instance.NegateCounter();
 
+        float PowerUpSpawnChange = 0f;
+
+        if(enemyType == EnemyType.Goop)
+        {
+        PowerUpSpawnChange = .1f;
+        }
+        else if(enemyType == EnemyType.BigGoop)
+        {
+        PowerUpSpawnChange = 0.5f;
+        }
+
+        if (Random.value <= PowerUpSpawnChange)
+        {
+            Instantiate(GameController.Instance.PowerUp[Random.Range(0,GameController.Instance.PowerUp.Length )], transform.position, Quaternion.identity);
+        }
     }
 
     public void AttackPlayer()

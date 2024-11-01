@@ -10,6 +10,8 @@ using UnityEngine.Events;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class GameController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -17,7 +19,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     public int MaxTotalEnemies;
     public int MaxEnemiesInMap;
-
+    public AudioClip SelectSound;
     public AudioClip GoopBounce;
     public AudioClip GoopAttack;
     public AudioClip HealSound;
@@ -26,6 +28,7 @@ public class GameController : MonoBehaviour
     public TMP_Text TimerText;
     public TMP_Text HealthText;
     public TMP_Text EnemiesLeftText;
+    public GameObject[] PowerUp;
     public GameObject[] BuffText;
     public GameObject WinText;
     public GameObject LoseText;
@@ -59,6 +62,7 @@ public class GameController : MonoBehaviour
         LevelChange(1);
     }
 
+    PlayerControllerSelectSound();
         
         GameState();
 
@@ -66,6 +70,12 @@ public class GameController : MonoBehaviour
         {
         GameStatsControl();
         }
+    }
+
+    private void PlayerControllerSelectSound()
+    {
+        if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+        AudioSource.PlayClipAtPoint(SelectSound, transform.position);
     }
 
 private void GameTimer()
@@ -143,16 +153,15 @@ private void GameTimer()
 
     public void RestartGame()
     {
-    SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
 
     public void LevelChange(int index)
     {
-    StartGame=true;
-    LevelObject[index].SetActive(true);
-    StartCoroutine(GameEvents.Instance.AppearGunChoice());
-    LevelSelector.SetActive(false);
-
+        StartGame=true;
+        LevelObject[index].SetActive(true);
+        StartCoroutine(GameEvents.Instance.AppearGunChoice());
+        LevelSelector.SetActive(false);
     }   
 
     public void DebrisSpawner(Vector3 hit)
@@ -164,46 +173,39 @@ private void GameTimer()
 
     public void GameStatsControl()
     {
-    StatsMenu.SetActive(true);
-    GameTimer();
-    HealthText.SetText("Health : " + PlayerHealth);
-    EnemiesLeftText.SetText(EnemySpawner.instance.EnemiesKilled + " / " + MaxTotalEnemies + " Enemies");
-
+        StatsMenu.SetActive(true);
+        GameTimer();
+        HealthText.SetText("Health : " + PlayerHealth);
+        EnemiesLeftText.SetText(EnemySpawner.instance.EnemiesKilled + " / " + MaxTotalEnemies + " Enemies");
     }
 
     public void RageEffect(bool state)
     {
-    foreach(var buffText in BuffText)
-    {
+        foreach(var buffText in BuffText)
+        {
         buffText.SetActive(state);
-    }
+        }
     }
 
 
     public void DamageUp()
-{
+    {
     GunMuzzle[] weaponInstances = FindObjectsOfType<GunMuzzle>();
-
     foreach (var instance in weaponInstances)
     {
-        // Increase the bullet damage by 20%
         float originalDamage = instance.BulletDamage;
         instance.BulletDamage += originalDamage * 0.2f;
-        GameController.Instance.RageEffect(true);
-        AudioSource.PlayClipAtPoint(GameController.Instance.RageSound, transform.position);
+        Instance.RageEffect(true);
+        AudioSource.PlayClipAtPoint(RageSound, transform.position);
 
-        // Start coroutine to reset the damage after 10 seconds
         StartCoroutine(ResetDamageAfterDelay(instance, originalDamage));
     }
 }
 
     public IEnumerator ResetDamageAfterDelay(GunMuzzle instance, float originalDamage)
-{
-    // Wait for 10 seconds
-    yield return new WaitForSeconds(10f);
+{    yield return new WaitForSeconds(10f);
 
-    // Reset the damage to the original value
-    GameController.Instance.RageEffect(false);
+    RageEffect(false);
     instance.BulletDamage = originalDamage;
 }
 

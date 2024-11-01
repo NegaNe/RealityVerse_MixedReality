@@ -456,11 +456,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3703589875226438121}
   - component: {fileID: 2681763588138532114}
-  - component: {fileID: 6542800293582504136}
   - component: {fileID: 3470587866821791563}
   - component: {fileID: 8069758186450406048}
   - component: {fileID: 4479686594324267705}
   - component: {fileID: 1308656054199863268}
+  - component: {fileID: 7253845675387138382}
   m_Layer: 0
   m_Name: FlyingGoop
   m_TagString: Enemy
@@ -510,27 +510,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!135 &6542800293582504136
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7820075294096734627}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.7
-  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!195 &3470587866821791563
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -540,7 +519,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7820075294096734627}
   m_Enabled: 1
   m_AgentTypeID: -902729914
-  m_Radius: 0.15
+  m_Radius: 0.25
   m_Speed: 3.5
   m_Acceleration: 12
   avoidancePriority: 80
@@ -697,3 +676,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &7253845675387138382
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7820075294096734627}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.1533561, z: 1.5277544}
+  m_Center: {x: 0, y: 0.5097343, z: 0.14308983}

@@ -17,48 +17,21 @@ public class ControllerCast : MonoBehaviour
     private Color OriginalColor;
 
     public Transform rayOrigin; 
-    private LineRenderer lineRenderer;
     
     void Start()
     {
         rayOrigin = transform;
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.05f;
-        lineRenderer.endWidth = 0.05f;
-        lineRenderer.positionCount = 2;
-        lineRenderer.enabled = false;
+
     }
 
 void Update()
 {
-    DrawRayCast();
     CastRay();
     LevelChange();
     CheckForGunDisplay();
 }
 
-void DrawRayCast()
-{
-        RaycastHit hit;
-        Vector3 direction = rayOrigin.forward;
 
-        if (Physics.Raycast(rayOrigin.position, direction, out hit, raycastDistance))
-        {
-            // Visualize the ray only in the build
-#if !UNITY_EDITOR
-            lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, rayOrigin.position);
-            lineRenderer.SetPosition(1, hit.point);
-#endif
-            // Handle hit object behavior here
-            Debug.Log("Hit: " + hit.collider.name);
-        }
-        else
-        {
-            // Hide the line when no hit occurs
-            lineRenderer.enabled = true;
-        }
-}
 
 void CastRay()
 {

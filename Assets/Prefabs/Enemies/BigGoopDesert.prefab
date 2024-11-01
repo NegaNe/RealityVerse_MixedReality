@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 4632359068546900427, guid: 12a4700535c16cd4bafe39c825ebb520,
         type: 3}
       propertyPath: m_Name
-      value: BigGoop Variant
+      value: BigGoopDesert
       objectReference: {fileID: 0}
     - target: {fileID: 5405061358297054065, guid: 12a4700535c16cd4bafe39c825ebb520,
         type: 3}
@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6577945375295111198, guid: 12a4700535c16cd4bafe39c825ebb520,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a0ea39e0abe1e6f4e85b0f9607b1105a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
