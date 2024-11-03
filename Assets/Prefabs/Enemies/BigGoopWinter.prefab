@@ -68,6 +68,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigGoopWinter
       objectReference: {fileID: 0}
+    - target: {fileID: 7869492431575802231, guid: 00e070bee1aa3e2449ee1e3df7532a76,
+        type: 3}
+      propertyPath: particlePrefab
+      value: 
+      objectReference: {fileID: 4572263728159426470, guid: c674f4eb4ab0dcb43b1a4fcacddb5c18,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

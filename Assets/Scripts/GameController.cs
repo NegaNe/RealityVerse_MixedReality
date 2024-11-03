@@ -16,9 +16,10 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
 
     // Serialized fields and other variables
-    [SerializeField] public int MaxTotalEnemies;
+    [SerializeField] 
+    public int MaxTotalEnemies;
     public int MaxEnemiesInMap;
-    public AudioClip SelectSound, GoopBounce, GoopAttack, HealSound, RageSound;
+    public AudioClip DestroyWallSound, SelectSound, GoopBounce, GoopAttack, HealSound, RageSound;
     public Text EnemiesKilled;
     public TMP_Text TimerText, HealthText, EnemiesLeftText;
     public GameObject[] PowerUp, BuffText;
@@ -26,12 +27,18 @@ public class GameController : MonoBehaviour
     public GameObject[] LevelObject;
     public GameObject LevelSelector;
     public List<GameObject> DebrisPrefabs;
+    private GameObject Player;
 
     public float PlayerHealth = 100;
     public float Timer = 300; // Timer in seconds
     public bool GunTaken, StartGame;
     private bool isGameOver = false; // Flag to prevent repeated scoring
 
+
+    public void WallDestroySound(Vector3 WallPos)
+    {
+        AudioSource.PlayClipAtPoint(DestroyWallSound, WallPos);
+    }
 
     void Awake()
     {
@@ -43,6 +50,11 @@ public class GameController : MonoBehaviour
         {
             Destroy(Instance);
         }
+    }
+
+    void Start()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
@@ -67,8 +79,8 @@ public class GameController : MonoBehaviour
 
  private void PlayerControllerSelectSound()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-            AudioSource.PlayClipAtPoint(SelectSound, transform.position);
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) || OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger))
+            AudioSource.PlayClipAtPoint(SelectSound, Player.transform.position);
     }
 
 
@@ -152,8 +164,8 @@ public class GameController : MonoBehaviour
     public void DebrisSpawner(Vector3 hit)
     {
         GameObject debrisPrefab = DebrisPrefabs[Random.Range(0, DebrisPrefabs.Count)];
-        GameObject debris = Instantiate(debrisPrefab, hit, Quaternion.identity);
-        Destroy(debris, 1f);
+        GameObject debris = Instantiate(debrisPrefab, hit, Random.rotation);
+        Destroy(debris, 2.5f);
     }
 
     public void GameStatsControl()

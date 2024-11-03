@@ -10,7 +10,9 @@ public class FlyingGoop : MonoBehaviour
     public Transform bulletSpawnPoint;
     public float shootingInterval = 2f;
     private float shootingDistance;
-    public GoopData FlyingGoopData;   // ScriptableObject or data class containing Speed and Health
+    public GoopData FlyingGoopData;
+    public GameObject particlePrefab;
+    private float explosionForce = 100f;
 
     private float speed;
     public float health;
@@ -86,7 +88,7 @@ public class FlyingGoop : MonoBehaviour
             if (rb != null)
             {
                 Vector3 shootingDirection = (player.transform.position - bulletSpawnPoint.position).normalized;
-                rb.velocity = shootingDirection * 10f;
+                rb.velocity = shootingDirection * 20f;
             }
             else
             {
@@ -160,9 +162,30 @@ public class FlyingGoop : MonoBehaviour
         }
     }
 
+        private void OnKilled()
+    {
+            for (int i = 0; i < 5; i++)
+        {
+            GameObject particle = Instantiate(particlePrefab, transform.position, Random.rotation);
+            
+            Rigidbody rb = particle.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 explosionDirection = (Random.insideUnitSphere + Vector3.up).normalized;
+                rb.AddForce(explosionDirection * explosionForce);
+            }
+            Destroy(particle, 1.5f);
+        }
+    }
+
+
     void OnDestroy()
     {
+    OnKilled();
+    if(EnemySpawner.instance.KilledCounter() != null)
+    {
         EnemySpawner.instance.KilledCounter();
+    }
         EnemySpawner.instance.NegateCounter();
 
         if(Random.value <= 0.25f)

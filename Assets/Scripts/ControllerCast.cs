@@ -9,13 +9,8 @@ public class ControllerCast : MonoBehaviour
 {
     // private GunManager gunManager;
     public GunDisplay gunDisplay { get; private set; }
-
-    [SerializeField]
-    private GameObject rend;
     readonly float raycastDistance = 1f;
     private GameObject _hitObject;
-    private Color OriginalColor;
-
     public Transform rayOrigin; 
     
     void Start()
@@ -43,16 +38,16 @@ void CastRay()
 
 void CheckForGunDisplay()
 {
-    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay") && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+    if (_hitObject != null && _hitObject.layer == LayerMask.NameToLayer("GunDisplay") && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
     ChangeGun();
 }
 
 
-void ChangeGun() //change gun from here, raycast take, raycast send data.
+void ChangeGun() 
 {
     GameController.Instance.GunTaken=true;
     GameController.Instance.StartGame=true;
-if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger))
+if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
 {
     switch (_hitObject.transform.gameObject.tag)
         {
@@ -76,7 +71,7 @@ void LevelChange() //self-explanatory
     {
         var button = hit.collider.gameObject.GetComponent<ButtonScript>();
 
-    if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger)){
+    if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)){
         if (button.buttonType == ButtonScript.ButtonUsage.Changelevel)
         {
             button.ButtonLevel(button.LevelIndex);
@@ -84,8 +79,6 @@ void LevelChange() //self-explanatory
         else if (button.buttonType == ButtonScript.ButtonUsage.ReloadLevel)
         {
             button.ReloadLevel();
-            rend = hit.collider.gameObject;
-            rend.GetComponent<Renderer>().material.color = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) ? Color.green : OriginalColor;
         }
         }
     }

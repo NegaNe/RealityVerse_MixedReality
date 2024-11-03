@@ -43,6 +43,8 @@ public class BulletParticle : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
         {
+            GameController.Instance.DebrisSpawner(transform.position);
+            GameController.Instance.WallDestroySound(transform.position);
             Destroy(other.gameObject);
         }
 

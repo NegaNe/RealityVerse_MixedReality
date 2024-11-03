@@ -11,6 +11,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(AudioSource), typeof(NavMeshAgent))]
 public class EnemyGoop : MonoBehaviour
 {
+
     private ParticleSystem destroyParticles;
     public float Health;
     [SerializeField]
@@ -18,6 +19,8 @@ public class EnemyGoop : MonoBehaviour
     [SerializeField]
     private float Speed;
     public GoopData goopData, bigGoopData;
+    public GameObject particlePrefab;
+    private float explosionForce = 100f;
     public float wanderRadius = 5f; 
     public float detectionRadius = 15f; 
 
@@ -190,11 +193,49 @@ public class EnemyGoop : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
-    void OnDestroy()
+
+
+    public void AttackPlayer()
     {
-    EnemyParticle();
+    AudioSource.PlayClipAtPoint(GameController.Instance.GoopAttack, transform.position);
+    GameController.Instance.PlayerHealth -= AttackDmg;
+    }
+
+
+    public void BounceSound()
+    {
+    AudioSource.PlayClipAtPoint(GameController.Instance.GoopBounce, transform.position);
+    }
+
+    private void OnKilled()
+    {
+            for (int i = 0; i < 5; i++)
+        {
+            GameObject particle = Instantiate(particlePrefab, transform.position, Random.rotation);
+            
+            Rigidbody rb = particle.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 explosionDirection = (Random.insideUnitSphere + Vector3.up).normalized;
+                rb.AddForce(explosionDirection * explosionForce);
+            }
+
+            Destroy(particle, 1.5f);
+        }
+    }
+
+
+    private void OnDestroy()
+    {
+        OnKilled();
+
+        if(EnemySpawner.instance.KilledCounter() != null)
+        {
         EnemySpawner.instance.KilledCounter();
+        }
+
         EnemySpawner.instance.NegateCounter();
+
 
         float PowerUpSpawnChange = 0f;
 
@@ -211,27 +252,5 @@ public class EnemyGoop : MonoBehaviour
         {
             Instantiate(GameController.Instance.PowerUp[Random.Range(0,GameController.Instance.PowerUp.Length )], transform.position, Quaternion.identity);
         }
-    }
-
-    public void AttackPlayer()
-    {
-    AudioSource.PlayClipAtPoint(GameController.Instance.GoopAttack, transform.position);
-        GameController.Instance.PlayerHealth -= AttackDmg;
-    }
-
-        private void EnemyParticle()
-    {
-        if (destroyParticles != null)
-        {
-            destroyParticles.transform.parent = null;  // Detach the particle system
-            destroyParticles.Play();                   // Play the particle system
-        }
-
-        Destroy(gameObject);  // Destroy the enemy object
-    }
-
-    public void BounceSound()
-    {
-    AudioSource.PlayClipAtPoint(GameController.Instance.GoopBounce, transform.position);
     }
 }

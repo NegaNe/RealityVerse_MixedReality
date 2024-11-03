@@ -32,9 +32,6 @@ public class EnemySpawner : MonoBehaviour
         Destroy(instance);
         }
         InvokeRepeating(nameof(SpawnEnemies), 0, SpawnTimer);
-
-
-
         Spawners = GameObject.FindGameObjectsWithTag("Spawner");
     }
 
@@ -93,7 +90,7 @@ public class EnemySpawner : MonoBehaviour
         EnemyCounter--;
     }
 
-    public int KilledCounter()
+    public int? KilledCounter()
     {
         return EnemiesKilled++;
     }

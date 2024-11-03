@@ -7,8 +7,6 @@ using Unity.AI.Navigation;
 using System;
 using UnityEngine.XR.ARFoundation;
 
-
-
 public class MRUKDestructibles : MonoBehaviour
 {
     public GameObject PrefabToInstantiate;
@@ -74,6 +72,7 @@ public class MRUKDestructibles : MonoBehaviour
             }
         }
         }
+
 
     }
 

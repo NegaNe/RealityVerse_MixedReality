@@ -549,6 +549,8 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 5831011843310005067}
   shootingInterval: 2
   FlyingGoopData: {fileID: 11400000, guid: ae4f1e9d3da44de49bbd8f69600b3d8b, type: 2}
+  particlePrefab: {fileID: 4572263728159426470, guid: 1e18b4a1ea636774cb064dae588037ff,
+    type: 3}
   health: 0
   obstacleLayer:
     serializedVersion: 2
