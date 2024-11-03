@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Goop
   m_EditorClassIdentifier: 
   Health: 35
-  Damage: 10
+  Damage: 12
   Speed: 1

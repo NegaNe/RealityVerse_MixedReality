@@ -241,11 +241,11 @@ public class EnemyGoop : MonoBehaviour
 
         if(enemyType == EnemyType.Goop)
         {
-        PowerUpSpawnChange = .1f;
+        PowerUpSpawnChange = .05f;
         }
         else if(enemyType == EnemyType.BigGoop)
         {
-        PowerUpSpawnChange = 0.5f;
+        PowerUpSpawnChange = 0.15f;
         }
 
         if (Random.value <= PowerUpSpawnChange)

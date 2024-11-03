@@ -188,7 +188,7 @@ public class FlyingGoop : MonoBehaviour
     }
         EnemySpawner.instance.NegateCounter();
 
-        if(Random.value <= 0.25f)
+        if(Random.value <= 0.1f)
         {
             Instantiate(GameController.Instance.PowerUp[Random.Range(1,GameController.Instance.PowerUp.Length )], transform.position, Quaternion.identity);
         }

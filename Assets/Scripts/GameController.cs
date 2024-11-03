@@ -32,8 +32,7 @@ public class GameController : MonoBehaviour
     public float PlayerHealth = 100;
     public float Timer = 300; // Timer in seconds
     public bool GunTaken, StartGame;
-    private bool isGameOver = false; // Flag to prevent repeated scoring
-
+    private bool isGameOver = false; 
 
     public void WallDestroySound(Vector3 WallPos)
     {
@@ -60,20 +59,19 @@ public class GameController : MonoBehaviour
     void Update()
     {    
     PlayerControllerSelectSound();
-        // Detecting specific inputs for testing or gameplay actions
         if (Input.GetKeyDown(KeyCode.M))
         {
             LevelChange(1);
         }
 
-        if (!isGameOver) // Check win/loss state only if game is not over
+        if (!isGameOver) 
         {
             GameStateChecker();
         }
 
-        if (StartGame)
+        if (StartGame && GunTaken)
         {
-            GameStatsControl(); // Update stats while the game is running
+            GameStatsControl();
         }
     }
 
@@ -83,11 +81,10 @@ public class GameController : MonoBehaviour
             AudioSource.PlayClipAtPoint(SelectSound, Player.transform.position);
     }
 
-
     private void GameTimer()
     {
         Timer -= Time.deltaTime;
-        Timer = Mathf.Max(Timer, 0); // Clamp to zero
+        Timer = Mathf.Max(Timer, 0);
 
         int minutes = Mathf.FloorToInt(Timer / 60);
         int seconds = Mathf.FloorToInt(Timer % 60);
@@ -97,11 +94,11 @@ public class GameController : MonoBehaviour
 
     private void GameStateChecker()
     {
-        if (PlayerHealth <= 0) // Lose condition
+        if (PlayerHealth <= 0) 
         {
             EndGame("Lose");
         }
-        else if (Timer <= 0) // Win condition
+        else if (Timer <= 0) 
         {
             EndGame("Win");
         }
@@ -109,15 +106,13 @@ public class GameController : MonoBehaviour
 
     private void EndGame(string result)
     {
-        isGameOver = true; // Set game over flag
-
+        isGameOver = true;
         StartGame = false;
 
-        // Send score data to ScoreManager
+        // send scoreData to ScoreManager
         int enemiesKilled = EnemySpawner.instance.EnemiesKilled;
         FindObjectOfType<ScoreManager>().AddScore(enemiesKilled, Timer, result);
 
-        // Update UI elements
         SummaryMenu.SetActive(true);
         StatsMenu.SetActive(false);
         EnemiesKilled.text = $"Enemies Killed : {enemiesKilled}";
@@ -131,8 +126,7 @@ public class GameController : MonoBehaviour
             LoseText.SetActive(true);
         }
 
-        // Clean up the scene
-        EnemySpawner.instance.RemoveAllEnemies();
+        EnemySpawner.instance.RemoveAllEnemies(); // kill all enemies
         GunManager.instance.ChangeGun(GunManager.WeaponType.None);
     }
     private void EmptyEnemies()
@@ -150,7 +144,7 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0); // Reload the first scene
+        SceneManager.LoadScene(0); 
     }
 
     public void LevelChange(int index)

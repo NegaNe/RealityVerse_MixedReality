@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Flying Goop
   m_EditorClassIdentifier: 
   Health: 30
-  Damage: 6
+  Damage: 8
   Speed: 5

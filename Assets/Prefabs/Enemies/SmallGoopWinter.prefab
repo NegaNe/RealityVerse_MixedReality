@@ -10,6 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3501373456203415973, guid: 9ec75e43dfc57754f944c33571fb6f34,
         type: 3}
+      propertyPath: AttackDmg
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3501373456203415973, guid: 9ec75e43dfc57754f944c33571fb6f34,
+        type: 3}
       propertyPath: particlePrefab
       value: 
       objectReference: {fileID: 4572263728159426470, guid: c674f4eb4ab0dcb43b1a4fcacddb5c18,

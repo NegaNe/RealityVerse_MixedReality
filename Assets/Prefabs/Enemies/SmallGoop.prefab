@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 0
-  AttackDmg: 555
+  AttackDmg: 0
   Speed: 0
   goopData: {fileID: 11400000, guid: c1dbe9cb65481cb4bbff3c037c69a389, type: 2}
   bigGoopData: {fileID: 11400000, guid: 4360955e220c62245845bd4e3b6bba12, type: 2}
