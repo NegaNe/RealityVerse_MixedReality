@@ -28,8 +28,7 @@ public class GunDisplay : MonoBehaviour
 
         if (GameController.Instance.GunTaken)
         {
-            gameObject.SetActive(false);
-            return;
+            Destroy(gameObject);
         }
 
         float newY = pivot.transform.position.y + Mathf.Sin(Time.time * SpinSpeed) * 0.05f;

@@ -56,8 +56,7 @@ public class GameController : MonoBehaviour
 
 
     void Update()
-    {
-    if(Input.GetKeyDown(KeyCode.M))
+    {    if(Input.GetKeyDown(KeyCode.M))
     {
         LevelChange(1);
     }
@@ -69,6 +68,10 @@ public class GameController : MonoBehaviour
         if(StartGame)
         {
         GameStatsControl();
+        }
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            FindObjectOfType<ScoreManager>().AddScore(55, 225, "Lose");
         }
     }
 
@@ -99,18 +102,9 @@ private void GameTimer()
     {
         try
         {
-            // if (EnemySpawner.instance.EnemiesKilled >= MaxTotalEnemies )
-            // {
-            //     GunManager.instance.ChangeGun(GunManager.WeaponType.None);
-            //     StartGame = false;
-            //     SummaryMenu.SetActive(true);
-            //     WinText.SetActive(true);
-            //     StatsMenu.SetActive(false);
-            //     EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
-
-            // } 
             if (PlayerHealth <= 0)
             {
+                FindObjectOfType<ScoreManager>().AddScore(EnemySpawner.instance.EnemiesKilled, Timer, "Lose");
                 GunManager.instance.ChangeGun(GunManager.WeaponType.None);
                 StartGame = false;
                 SummaryMenu.SetActive(true);
@@ -122,6 +116,7 @@ private void GameTimer()
             }
             else if(Timer <=0)
             {
+                FindObjectOfType<ScoreManager>().AddScore(EnemySpawner.instance.EnemiesKilled, Timer, "Win");
                 GunManager.instance.ChangeGun(GunManager.WeaponType.None);
                 StartGame = false;
                 SummaryMenu.SetActive(true);

@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f4d64ee667ab6646bcb2cff17f5bfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 2505208139405962126, guid: 81445792b6b796b47b1ae362abd02a73,
+  bulletPrefab: {fileID: 7480044077389572566, guid: 0199dfced37d27e4dba018d883c32350,
     type: 3}
   bulletSpeed: 20
   BulletDamage: 0
   BulletDestroyTime: 1
+  poolSize: 10
   firingType: 0
   weaponPos: 0
 --- !u!82 &3831580083854749215
