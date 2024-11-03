@@ -11,132 +11,122 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(AudioSource))]
-
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
     public static GameController Instance;
-    [SerializeField]
-    public int MaxTotalEnemies;
-    public int MaxEnemiesInMap;
-    public AudioClip SelectSound;
-    public AudioClip GoopBounce;
-    public AudioClip GoopAttack;
-    public AudioClip HealSound;
-    public AudioClip RageSound;
-    public Text EnemiesKilled;
-    public TMP_Text TimerText;
-    public TMP_Text HealthText;
-    public TMP_Text EnemiesLeftText;
-    public GameObject[] PowerUp;
-    public GameObject[] BuffText;
-    public GameObject WinText;
-    public GameObject LoseText;
 
-    public float PlayerHealth = 100;
-    public float Timer = 300; // set to seconds -> 300s = 5 minutes, 300s * 2 = 600s = 10 minutes
-    public bool GunTaken, StartGame;
+    // Serialized fields and other variables
+    [SerializeField] public int MaxTotalEnemies;
+    public int MaxEnemiesInMap;
+    public AudioClip SelectSound, GoopBounce, GoopAttack, HealSound, RageSound;
+    public Text EnemiesKilled;
+    public TMP_Text TimerText, HealthText, EnemiesLeftText;
+    public GameObject[] PowerUp, BuffText;
+    public GameObject WinText, LoseText, SummaryMenu, StatsMenu;
     public GameObject[] LevelObject;
     public GameObject LevelSelector;
-    public GameObject SummaryMenu;
-    public GameObject StatsMenu;
     public List<GameObject> DebrisPrefabs;
+
+    public float PlayerHealth = 100;
+    public float Timer = 300; // Timer in seconds
+    public bool GunTaken, StartGame;
+    private bool isGameOver = false; // Flag to prevent repeated scoring
+
 
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
-        } 
+        }
         else
         {
             Destroy(Instance);
         }
     }
 
-
     void Update()
-    {    if(Input.GetKeyDown(KeyCode.M))
-    {
-        LevelChange(1);
-    }
-
+    {    
     PlayerControllerSelectSound();
-        
-        GameState();
-
-        if(StartGame)
+        // Detecting specific inputs for testing or gameplay actions
+        if (Input.GetKeyDown(KeyCode.M))
         {
-        GameStatsControl();
+            LevelChange(1);
         }
-        if(Input.GetKeyDown(KeyCode.L))
+
+        if (!isGameOver) // Check win/loss state only if game is not over
         {
-            FindObjectOfType<ScoreManager>().AddScore(55, 225, "Lose");
+            GameStateChecker();
+        }
+
+        if (StartGame)
+        {
+            GameStatsControl(); // Update stats while the game is running
         }
     }
 
-    private void PlayerControllerSelectSound()
+ private void PlayerControllerSelectSound()
     {
-        if(OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
-        AudioSource.PlayClipAtPoint(SelectSound, transform.position);
+        if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger))
+            AudioSource.PlayClipAtPoint(SelectSound, transform.position);
     }
 
-private void GameTimer()
-{
-    // Decrease the timer by the time passed since the last frame
-    Timer -= Time.deltaTime;
 
-    // Clamp the Timer to zero to avoid negative time
-    Timer = Mathf.Max(Timer, 0);
-
-    // Convert the timer to minutes and seconds
-    int minutes = Mathf.FloorToInt(Timer / 60);
-    int seconds = Mathf.FloorToInt(Timer % 60);
-
-    // Format the time and display it on the UI Text
-    TimerText.SetText(string.Format("Time : {0:00}:{1:00}", minutes, seconds));
-}
-
-
-    private void GameState()
+    private void GameTimer()
     {
-        try
+        Timer -= Time.deltaTime;
+        Timer = Mathf.Max(Timer, 0); // Clamp to zero
+
+        int minutes = Mathf.FloorToInt(Timer / 60);
+        int seconds = Mathf.FloorToInt(Timer % 60);
+
+        TimerText.text = $"Time : {minutes:00}:{seconds:00}";
+    }
+
+    private void GameStateChecker()
+    {
+        if (PlayerHealth <= 0) // Lose condition
         {
-            if (PlayerHealth <= 0)
-            {
-                FindObjectOfType<ScoreManager>().AddScore(EnemySpawner.instance.EnemiesKilled, Timer, "Lose");
-                GunManager.instance.ChangeGun(GunManager.WeaponType.None);
-                StartGame = false;
-                SummaryMenu.SetActive(true);
-                LoseText.SetActive(true);
-                EnemySpawner.instance.RemoveAllEnemies();
-                StatsMenu.SetActive(false);
-                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
-                EmptyEnemies();
-            }
-            else if(Timer <=0)
-            {
-                FindObjectOfType<ScoreManager>().AddScore(EnemySpawner.instance.EnemiesKilled, Timer, "Win");
-                GunManager.instance.ChangeGun(GunManager.WeaponType.None);
-                StartGame = false;
-                SummaryMenu.SetActive(true);
-                WinText.SetActive(true);
-                StatsMenu.SetActive(false);
-                EnemySpawner.instance.RemoveAllEnemies();
-                EnemiesKilled.text = "Enemies Killed : " + EnemySpawner.instance.EnemiesKilled;
-            }
+            EndGame("Lose");
         }
-        catch
+        else if (Timer <= 0) // Win condition
         {
-            return;
+            EndGame("Win");
         }
     }
 
+    private void EndGame(string result)
+    {
+        isGameOver = true; // Set game over flag
+
+        StartGame = false;
+
+        // Send score data to ScoreManager
+        int enemiesKilled = EnemySpawner.instance.EnemiesKilled;
+        FindObjectOfType<ScoreManager>().AddScore(enemiesKilled, Timer, result);
+
+        // Update UI elements
+        SummaryMenu.SetActive(true);
+        StatsMenu.SetActive(false);
+        EnemiesKilled.text = $"Enemies Killed : {enemiesKilled}";
+
+        if (result == "Win")
+        {
+            WinText.SetActive(true);
+        }
+        else
+        {
+            LoseText.SetActive(true);
+        }
+
+        // Clean up the scene
+        EnemySpawner.instance.RemoveAllEnemies();
+        GunManager.instance.ChangeGun(GunManager.WeaponType.None);
+    }
     private void EmptyEnemies()
     {
-        foreach(var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-
             enemy.SetActive(false);
         }
     }
@@ -148,16 +138,16 @@ private void GameTimer()
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0); // Reload the first scene
     }
 
     public void LevelChange(int index)
     {
-        StartGame=true;
+        StartGame = true;
         LevelObject[index].SetActive(true);
         StartCoroutine(GameEvents.Instance.AppearGunChoice());
         LevelSelector.SetActive(false);
-    }   
+    }
 
     public void DebrisSpawner(Vector3 hit)
     {
@@ -170,38 +160,36 @@ private void GameTimer()
     {
         StatsMenu.SetActive(true);
         GameTimer();
-        HealthText.SetText("Health : " + PlayerHealth);
-        EnemiesLeftText.SetText(EnemySpawner.instance.EnemiesKilled + " / " + MaxTotalEnemies + " Enemies");
+        HealthText.text = "Health : " + PlayerHealth;
+        EnemiesLeftText.text = $"{EnemySpawner.instance.EnemiesKilled} / {MaxTotalEnemies} Enemies";
     }
 
     public void RageEffect(bool state)
     {
-        foreach(var buffText in BuffText)
+        foreach (var buffText in BuffText)
         {
-        buffText.SetActive(state);
+            buffText.SetActive(state);
         }
     }
 
-
     public void DamageUp()
     {
-    GunMuzzle[] weaponInstances = FindObjectsOfType<GunMuzzle>();
-    foreach (var instance in weaponInstances)
-    {
-        float originalDamage = instance.BulletDamage;
-        instance.BulletDamage += originalDamage * 0.2f;
-        Instance.RageEffect(true);
-        AudioSource.PlayClipAtPoint(RageSound, transform.position);
+        GunMuzzle[] weaponInstances = FindObjectsOfType<GunMuzzle>();
+        foreach (var instance in weaponInstances)
+        {
+            float originalDamage = instance.BulletDamage;
+            instance.BulletDamage += originalDamage * 0.2f;
+            Instance.RageEffect(true);
+            AudioSource.PlayClipAtPoint(RageSound, transform.position);
 
-        StartCoroutine(ResetDamageAfterDelay(instance, originalDamage));
+            StartCoroutine(ResetDamageAfterDelay(instance, originalDamage));
+        }
     }
-}
 
     public IEnumerator ResetDamageAfterDelay(GunMuzzle instance, float originalDamage)
-{    yield return new WaitForSeconds(10f);
-
-    RageEffect(false);
-    instance.BulletDamage = originalDamage;
-}
-
+    {
+        yield return new WaitForSeconds(10f);
+        RageEffect(false);
+        instance.BulletDamage = originalDamage;
+    }
 }

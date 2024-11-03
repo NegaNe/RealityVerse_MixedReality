@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class ScoreData
 {
-   public int enemiesKilled;
+    public int enemiesKilled;
     public int minutes;
     public int seconds;
     public string gameResult;
@@ -19,7 +19,6 @@ public class ScoreData
         this.gameResult = gameResult;
     }
 
-    // Returns a formatted string for display
     public string GetScoreText()
     {
         return $"Enemies Killed: {enemiesKilled}, Time Left: {minutes:00}:{seconds:00}, Result: {gameResult}";
@@ -39,8 +38,7 @@ public class ScoreManager : MonoBehaviour
     private string filePath;
     private ScoreList scoreList;
 
-
-  void Awake()
+    void Awake()
     {
         filePath = Path.Combine(Application.persistentDataPath, FILE_NAME);
         LoadScores();
@@ -51,11 +49,12 @@ public class ScoreManager : MonoBehaviour
         ScoreDisplay scoreboard = FindObjectOfType<ScoreDisplay>();
         if (scoreboard != null)
         {
+            Debug.Log("Initializing ScoreDisplay with loaded scores.");
             scoreboard.RefreshDisplay(scoreList.scores);
         }
     }
 
-     public void AddScore(int enemiesKilled, float timeLeftSeconds, string gameResult)
+    public void AddScore(int enemiesKilled, float timeLeftSeconds, string gameResult)
     {
         ScoreData newScore = new ScoreData(enemiesKilled, timeLeftSeconds, gameResult);
         scoreList.scores.Insert(0, newScore);
@@ -66,9 +65,11 @@ public class ScoreManager : MonoBehaviour
         }
 
         SaveScores();
+
         ScoreDisplay scoreboard = FindObjectOfType<ScoreDisplay>();
         if (scoreboard != null)
         {
+            Debug.Log($"Adding score: {newScore.GetScoreText()}");
             scoreboard.RefreshDisplay(scoreList.scores);
         }
     }
@@ -85,12 +86,12 @@ public class ScoreManager : MonoBehaviour
         {
             string json = File.ReadAllText(filePath);
             scoreList = JsonUtility.FromJson<ScoreList>(json);
-            Debug.Log($"Scores loaded from {filePath}: {json}"); // Log loaded scores
+            Debug.Log($"Scores loaded from file. Total scores: {scoreList.scores.Count}");
         }
         else
         {
             scoreList = new ScoreList();
-            Debug.Log("No score file found, starting fresh."); // Log if no score file exists
+            Debug.Log("No existing score file found, starting with an empty list.");
         }
     }
 

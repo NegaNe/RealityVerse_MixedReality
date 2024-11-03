@@ -41,6 +41,11 @@ public class BulletParticle : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Destructible"))
+        {
+            Destroy(other.gameObject);
+        }
+
         if (other.gameObject.CompareTag("Enemy"))
         {
          var enemyGoop = other.gameObject.GetComponent<EnemyGoop>();

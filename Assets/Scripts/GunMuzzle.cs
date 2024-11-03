@@ -9,7 +9,7 @@ using UnityEngine.Scripting;
 public class GunMuzzle : MonoBehaviour
 {
     public GameObject bulletPrefab;
-    public float bulletSpeed = 5;
+    public float bulletSpeed = 3;
     public float BulletDamage;
     private bool IsFiring;
     public float BulletDestroyTime = 3f;
@@ -77,7 +77,7 @@ public class GunMuzzle : MonoBehaviour
     {
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject bullet = Instantiate(bulletPrefab, transform.parent);
+            GameObject bullet = Instantiate(bulletPrefab);
             bullet.SetActive(false);
             bulletPool.Add(bullet);
         }
@@ -129,7 +129,7 @@ public class GunMuzzle : MonoBehaviour
             rb.velocity = spawnPoint.forward * bulletSpeed;
             StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
 
             if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {
@@ -152,9 +152,7 @@ public class GunMuzzle : MonoBehaviour
             bulletInstance.transform.rotation = spawnPoint.rotation;
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
-            Vector3 spreadDirection = Quaternion.Euler(
-                Random.insideUnitSphere * spreadAngle
-            ) * spawnPoint.forward;
+            Vector3 spreadDirection = Quaternion.Euler(Random.insideUnitSphere * spreadAngle) * spawnPoint.forward;
 
             rb.velocity = spreadDirection * bulletSpeed;
             StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
