@@ -45,19 +45,24 @@ public class GameController : MonoBehaviour
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
-            Destroy(Instance);
+            Destroy(gameObject);
         }
     }
 
     void Start()
     {
+        StartGame = false;
+        GunTaken = false;
         Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {    
+    Debug.Log("Has Gun Appear : " + GameEvents.Instance.HasGunAppear);
+    Debug.Log("Has Game Started : " + StartGame);
+
     PlayerControllerSelectSound();
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -108,6 +113,8 @@ public class GameController : MonoBehaviour
     {
         isGameOver = true;
         StartGame = false;
+        GunTaken = false;
+
 
         // send scoreData to ScoreManager
         int enemiesKilled = EnemySpawner.instance.EnemiesKilled;

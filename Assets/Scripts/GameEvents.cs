@@ -9,13 +9,14 @@ public class GameEvents : MonoBehaviour
     [SerializeField]
     private GameObject GunChoice;
     [SerializeField]
-    private bool HasGunAppear;
+    public bool HasGunAppear;
     // Start is called before the first frame update
     public static GameEvents Instance;
 
 
     private void Awake()
     {
+
         if (Instance == null)
         {
             Instance = this;
@@ -39,6 +40,8 @@ public IEnumerator AppearGunChoice()
     }
     yield return null;
 }
+
+
 
 
 }

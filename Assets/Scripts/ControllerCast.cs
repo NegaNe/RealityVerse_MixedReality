@@ -45,20 +45,27 @@ void CheckForGunDisplay()
 
 void ChangeGun() 
 {
-    GameController.Instance.GunTaken=true;
-    GameController.Instance.StartGame=true;
 if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
 {
+
+
     switch (_hitObject.transform.gameObject.tag)
         {
+        
     case "DisplayPistol":
+        GameController.Instance.GunTaken=true;
+    GameController.Instance.StartGame=true;
         GunManager.instance.ChangeGun(GunManager.WeaponType.
         Pistol);
         break;
     case "DisplayRifle":
+            GameController.Instance.GunTaken=true;
+    GameController.Instance.StartGame=true;
         GunManager.instance.ChangeGun(GunManager.WeaponType.Rifle);
         break;
     case "DisplayShotgun":
+            GameController.Instance.GunTaken=true;
+    GameController.Instance.StartGame=true;
         GunManager.instance.ChangeGun(GunManager.WeaponType.Shotgun);
         break;
                 }
