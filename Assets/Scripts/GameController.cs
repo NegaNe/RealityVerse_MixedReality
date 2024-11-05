@@ -28,7 +28,6 @@ public class GameController : MonoBehaviour
     public GameObject LevelSelector;
     public List<GameObject> DebrisPrefabs;
     private GameObject Player;
-
     public float PlayerHealth = 100;
     public float Timer = 300; // Timer in seconds
     public bool GunTaken, StartGame;
@@ -60,9 +59,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {    
-    Debug.Log("Has Gun Appear : " + GameEvents.Instance.HasGunAppear);
-    Debug.Log("Has Game Started : " + StartGame);
-
+    if(!GunTaken)
     PlayerControllerSelectSound();
         if (Input.GetKeyDown(KeyCode.M))
         {

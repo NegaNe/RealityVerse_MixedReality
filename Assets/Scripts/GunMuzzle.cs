@@ -129,7 +129,7 @@ public class GunMuzzle : MonoBehaviour
             rb.velocity = spawnPoint.forward * bulletSpeed;
             StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
 
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.15f);
 
             if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {
@@ -143,7 +143,7 @@ public class GunMuzzle : MonoBehaviour
     void Shotgun()
     {
         int pelletCount = 3;
-        float spreadAngle = 15f;
+        float spreadAngle = 30f;
 
         for (int i = 0; i < pelletCount; i++)
         {

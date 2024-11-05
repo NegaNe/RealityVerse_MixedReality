@@ -34,11 +34,10 @@ public class GunManager : MonoBehaviour
 
 }
 
-void Update()
-{
-
-    ChangeGun(currentGun);
-}
+// void Update()
+// {
+//     ChangeGun(currentGun);
+// }
 
 
 void InitGun(WeaponType currGun)
@@ -90,7 +89,6 @@ void InitializeControllerData(GameObject controller, ref GameObject[] controller
     }
 }
     
-
     public void ChangeGun(WeaponType newGun)
     {
         currentGun = newGun;
