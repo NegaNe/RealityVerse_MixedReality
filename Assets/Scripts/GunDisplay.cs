@@ -6,8 +6,10 @@ using Unity.XR.Oculus;
 using UnityEngine.Events;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(Rigidbody))]
 public class GunDisplay : MonoBehaviour
 {
+
     
     [Range(0.0f, 5f)]
     public float SpinSpeed;
@@ -17,7 +19,7 @@ public class GunDisplay : MonoBehaviour
 
     void Start()
     {
-        
+        GetComponent<Rigidbody>().isKinematic=true;
     }
 
     // Update is called once per frame

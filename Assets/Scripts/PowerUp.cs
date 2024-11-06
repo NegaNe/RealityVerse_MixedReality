@@ -42,10 +42,4 @@ private void HealthUp()
     AudioSource.PlayClipAtPoint(GameController.Instance.HealSound, transform.position);
     GameController.Instance.PlayerHealth+=20;
 }
-
-
-
-
-
-
 }

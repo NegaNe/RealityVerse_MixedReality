@@ -119,10 +119,10 @@ using System.Linq;
             }
         }
 
-        int LayerMaskToLayer(LayerMask layerMask)
+        int LayerMaskToLayer(LayerMask layerMask) // get layermask value
         {
-            //int LayerIndex = (int)Mathf.Log(layerMask.value, 2); // IT JUST WORKS?? => OLD CODE
-            return layerMask.value != 0 ? Mathf.Clamp((int)Mathf.Log(layerMask.value, 2), 0, 31) : -1; // simplified, still, it just works.
+            //int LayerIndex = (int)Mathf.Log(layerMask.value, 2); // nah
+            return layerMask.value != 0 ? Mathf.Clamp((int)Mathf.Log(layerMask.value, 2), 0, 31) : -1; // using Base-2 Algorithm~
         }
 
         bool CellTouchesExclusionZone(DefaultTriangulationCell<DefaultVertex> cell)
@@ -132,7 +132,7 @@ using System.Linq;
 
             foreach (var vertex in cell.Vertices)
             {
-                Vector3 vertexPosition = new Vector3((float)vertex.Position[0], 0, (float)vertex.Position[1]);
+                Vector3 vertexPosition = new((float)vertex.Position[0], 0, (float)vertex.Position[1]);
                 if (vertexPosition.z < exclusionZoneMinZ)
                 {
                     return true;

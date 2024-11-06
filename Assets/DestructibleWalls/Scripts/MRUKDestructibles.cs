@@ -10,15 +10,9 @@ using UnityEngine.XR.ARFoundation;
 public class MRUKDestructibles : MonoBehaviour
 {
     public GameObject PrefabToInstantiate;
-    private string Semantics;
-
-    public GameObject jumpableObject;  // Reference to the jumpable object prefab or GameObject
-    public Transform startPoint;       // Position where the agent starts the jump
-    public Transform endPoint;         // Position where the agent lands after the jump
-
     private List<NavMeshLinkInstance> linkInstances = new List<NavMeshLinkInstance>();
 
-    private string[] Classifications = {"WALL_ART", "WINDOW_FRAME", "COUCH", "TABLE", "BED", "LAMP", "PLANT", "SCREEN", "STORAGE", "OTHER"} ;
+    private readonly string[] Classifications = {"WALL_ART", "WINDOW_FRAME", "COUCH", "TABLE", "BED", "LAMP", "PLANT", "SCREEN", "STORAGE", "OTHER"} ;
     
     public void MRUKVonoroiGeneration(){
         GameObject effectMesh = GameObject.Find("GLOBAL_MESH_EffectMesh");
@@ -31,7 +25,6 @@ public class MRUKDestructibles : MonoBehaviour
 
       foreach (Transform transform in Transforms)
         {
-            Semantics = transform.name.ToLower();
 
             foreach (var classification in Classifications)
             {
@@ -56,7 +49,6 @@ public class MRUKDestructibles : MonoBehaviour
                         area = 0              
                     };
 
-                    // Add the link to the NavMesh and track the instance
                     NavMeshLinkInstance linkInstance = NavMesh.AddLink(linkData, transform.position, transform.rotation);
                     linkInstances.Add(linkInstance);
                 }

@@ -79,7 +79,7 @@ void InitializeControllerData(GameObject controller, ref GameObject[] controller
         {
             GameObject child = controller.transform.GetChild(i).gameObject;
             controllerData[i] = child;
-            child.AddComponent<ControllerCast>();
+            // child.AddComponent<ControllerCast>();
 
             if (child.activeInHierarchy)
             {
