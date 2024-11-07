@@ -119,7 +119,7 @@ public class GunMuzzle : MonoBehaviour
 
         while (true)
         {
-            audiosrc.PlayOneShot(GunManager.instance.ShotgunSound);
+            audiosrc.PlayOneShot(GunManager.instance.RifleSound);
 
             GameObject bulletInstance = GetBulletFromPool();
             bulletInstance.transform.position = spawnPoint.position;
@@ -127,13 +127,12 @@ public class GunMuzzle : MonoBehaviour
             Rigidbody rb = bulletInstance.GetComponent<Rigidbody>();
 
             rb.velocity = spawnPoint.forward * bulletSpeed;
-            StartCoroutine(DeactivateBulletAfterTime(bulletInstance, BulletDestroyTime));
+            StartCoroutine(DeactivateBulletAfterTime(bulletInstance, 1.5f));
 
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.2f);
 
-            if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) && !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
+            if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) || !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {
-                StopAllCoroutines();
                 IsFiring = false;
                 break;
             }
@@ -142,8 +141,8 @@ public class GunMuzzle : MonoBehaviour
 
     void Shotgun()
     {
-        int pelletCount = 3;
-        float spreadAngle = 30f;
+        int pelletCount = 4;
+        float spreadAngle = 15f;
 
         for (int i = 0; i < pelletCount; i++)
         {
