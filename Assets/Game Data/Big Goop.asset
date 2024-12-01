@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2018713f74b4742baa98e235e86fd9, type: 3}
   m_Name: Big Goop
   m_EditorClassIdentifier: 
-  Health: 75
-  Damage: 20
+  Health: 60
+  Damage: 5
   Speed: 0.1

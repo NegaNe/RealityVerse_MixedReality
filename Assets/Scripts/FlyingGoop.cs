@@ -88,7 +88,7 @@ public class FlyingGoop : MonoBehaviour
             if (rb != null)
             {
                 Vector3 shootingDirection = (player.transform.position - bulletSpawnPoint.position).normalized;
-                rb.velocity = shootingDirection * 20f;
+                rb.velocity = shootingDirection * 10f;
             }
             else
             {
@@ -106,7 +106,7 @@ public class FlyingGoop : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(0.5f, 4f));
+            yield return new WaitForSeconds(Random.Range(3f, 5f));
 
             if (!isDodging && CanDodge())
             {
@@ -120,7 +120,7 @@ public class FlyingGoop : MonoBehaviour
         Vector3 dodgeDirection = Random.value > 0.5f ? transform.right : -transform.right;
         Vector3 dodgeTarget = transform.position + dodgeDirection * 2f; 
 
-        if (Physics.Raycast(transform.position, dodgeDirection, 1f, obstacleLayer))
+        if (Physics.Raycast(transform.position, dodgeDirection, .5f, obstacleLayer))
         {
             return false; 
         }

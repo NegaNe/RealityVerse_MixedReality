@@ -10,7 +10,7 @@ void OnTriggerStay(Collider other)
 if(other.gameObject.layer == LayerMask.NameToLayer("Button"))
     other.gameObject.GetComponent<Renderer>().material.color = Color.green;
     
-    if (other != null && OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+    if (other != null && OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Button"))LevelChange(other.gameObject);
         

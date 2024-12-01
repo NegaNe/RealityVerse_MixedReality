@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2018713f74b4742baa98e235e86fd9, type: 3}
   m_Name: Flying Goop
   m_EditorClassIdentifier: 
-  Health: 30
-  Damage: 8
-  Speed: 5
+  Health: 15
+  Damage: 2
+  Speed: 3
