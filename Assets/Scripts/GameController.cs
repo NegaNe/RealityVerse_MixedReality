@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
     public GameObject[] LevelObject;
     public GameObject LevelSelector;
     public GameObject EnemyRushUI;
+    public AudioClip rushSound;
     public List<GameObject> DebrisPrefabs;
     private GameObject Player;
     public float PlayerHealth = 100;
@@ -98,7 +99,7 @@ public class GameController : MonoBehaviour
     private void GameStateChecker()
     {
 
-    float rushTimer = 0;
+    float rushTimer = 5;
 
         if (PlayerHealth <= 0) 
         {
@@ -110,13 +111,10 @@ public class GameController : MonoBehaviour
         }
         if(Timer <= 60)
         {
-        MaxEnemiesInMap = 30;
-            if(rushTimer <= 0)
-            {
-                EnemyRushUI.gameObject.SetActive(true);
-                rushTimer = 3;
-            }
-            else
+        EnemyRushUI.gameObject.SetActive(true);
+        MaxEnemiesInMap = 16;
+        AudioSource.PlayClipAtPoint(rushSound, Player.transform.position);
+            if(rushTimer >= 0)
             {
                 rushTimer -= Time.deltaTime;
             }

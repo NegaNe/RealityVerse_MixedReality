@@ -10,6 +10,7 @@ TagManager:
   - DisplayShotgun
   - Spawner
   - Bullet
+  - SecretGun
   layers:
   - Default
   - TransparentFX
