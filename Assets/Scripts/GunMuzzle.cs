@@ -10,6 +10,8 @@ public class GunMuzzle : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public float bulletSpeed = 3;
+
+    public float RifleFireRate;
     public float BulletDamage;
     private bool IsFiring;
     public float BulletDestroyTime = 3f;
@@ -43,6 +45,9 @@ public class GunMuzzle : MonoBehaviour
         audiosrc.spatialBlend = 1;
         audiosrc.spatialize = true;
         audiosrc.maxDistance = 10f;
+
+        RifleFireRate /= 60f;
+        RifleFireRate = 1f / RifleFireRate;
 
         InitializeBulletPool();
     }
@@ -129,7 +134,7 @@ public class GunMuzzle : MonoBehaviour
             rb.velocity = spawnPoint.forward * bulletSpeed;
             StartCoroutine(DeactivateBulletAfterTime(bulletInstance, 1.5f));
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(RifleFireRate);
 
             if (!OVRInput.Get(OVRInput.RawButton.RIndexTrigger) || !OVRInput.Get(OVRInput.RawButton.LIndexTrigger))
             {

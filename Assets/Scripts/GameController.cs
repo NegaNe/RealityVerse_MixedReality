@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
     public GameObject WinText, LoseText, SummaryMenu, StatsMenu;
     public GameObject[] LevelObject;
     public GameObject LevelSelector;
+    public GameObject EnemyRushUI;
     public List<GameObject> DebrisPrefabs;
     private GameObject Player;
     public float PlayerHealth = 100;
@@ -96,6 +97,9 @@ public class GameController : MonoBehaviour
 
     private void GameStateChecker()
     {
+
+    float rushTimer = 0;
+
         if (PlayerHealth <= 0) 
         {
             EndGame("Lose");
@@ -103,6 +107,23 @@ public class GameController : MonoBehaviour
         else if (Timer <= 0) 
         {
             EndGame("Win");
+        }
+        if(Timer <= 60)
+        {
+        MaxEnemiesInMap = 30;
+            if(rushTimer <= 0)
+            {
+                EnemyRushUI.gameObject.SetActive(true);
+                rushTimer = 3;
+            }
+            else
+            {
+                rushTimer -= Time.deltaTime;
+            }
+            if(rushTimer <= 0)
+            {
+                EnemyRushUI.gameObject.SetActive(false);
+            }
         }
     }
 

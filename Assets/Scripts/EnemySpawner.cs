@@ -11,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private GameObject[] Spawners = new GameObject[4];
     [SerializeField]
+    private GameObject EasterEggEnemy;
+    [SerializeField]
     private GameObject[] EnemyPrefabs;
     [SerializeField]
     public int SpawnAreaPosThreshold = 3;
@@ -31,10 +33,22 @@ public class EnemySpawner : MonoBehaviour
         {
         Destroy(instance);
         }
-        InvokeRepeating(nameof(SpawnEnemies), 0, SpawnTimer);
+        // InvokeRepeating(nameof(SpawnEasterEggEnemy), 0, 15f);
+        InvokeRepeating(nameof(SpawnEnemies), 1, SpawnTimer);
         Spawners = GameObject.FindGameObjectsWithTag("Spawner");
     }
 
+//     void SpawnEasterEggEnemy()
+//     {
+//             if (GameController.Instance.GunTaken && GameController.Instance.StartGame && EnemyCounter < GameController.Instance.MaxEnemiesInMap && EnemyCounter <= GameController.Instance.MaxTotalEnemies && EnemiesKilled + EnemyCounter <= GameController.Instance.MaxTotalEnemies)
+//         {
+//             int spawnRand = Random.Range(0, Spawners.Length);
+//             Vector3 spawnAreaPos = new Vector3(Random.Range(-SpawnAreaPosThreshold, SpawnAreaPosThreshold), 4, Random.Range(-SpawnAreaPosThreshold, SpawnAreaPosThreshold));
+
+//             GameObject enemyInstance = Instantiate(EasterEggEnemy, Spawners[spawnRand].transform.position + spawnAreaPos, Spawners[spawnRand].transform.rotation);
+//             enemies.Add(enemyInstance); // Add the spawned enemy to the list
+// }
+//     }
 
     void SpawnEnemies()
     {

@@ -12,6 +12,7 @@ public class GunManager : MonoBehaviour
     public GameObject[] LeftHandControllerData, RightHandControllerData;
     public GameObject LeftController, RightController;
     public GameObject[] Pistol, Rifle, Shotgun;
+    public GameObject SecretGun;
     public float GunDamage;
     public GameObject ActiveLeft, ActiveRight;
     public AudioClip ShotgunSound, RifleSound, PistolSound;
@@ -23,6 +24,7 @@ public class GunManager : MonoBehaviour
         Pistol,
         Rifle,
         Shotgun,
+        SecretGun
     }
     [SerializeField]
     private WeaponType currentGun = WeaponType.None;
@@ -99,6 +101,7 @@ void InitializeControllerData(GameObject controller, ref GameObject[] controller
         Rifle[1].SetActive(currentGun == WeaponType.Rifle);
         Shotgun[0].SetActive(currentGun == WeaponType.Shotgun);
         Shotgun[1].SetActive(currentGun == WeaponType.Shotgun);
+        SecretGun.SetActive(currentGun == WeaponType.SecretGun);
     }
 
 

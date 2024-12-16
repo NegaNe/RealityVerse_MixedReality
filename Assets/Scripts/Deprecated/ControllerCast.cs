@@ -62,6 +62,10 @@ if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.Get(OVRInput.Bu
             GameController.Instance.GunTaken=true;
         GunManager.instance.ChangeGun(GunManager.WeaponType.Shotgun);
         break;
+            case "SecretGun":
+            GameController.Instance.GunTaken=true;
+        GunManager.instance.ChangeGun(GunManager.WeaponType.SecretGun);
+        break;
                 }
             }
         }

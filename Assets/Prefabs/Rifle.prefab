@@ -48,6 +48,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2505208139405962126, guid: 81445792b6b796b47b1ae362abd02a73,
     type: 3}
   bulletSpeed: 15
+  RifleFireRate: 450
   BulletDamage: 0
   BulletDestroyTime: 1
   poolSize: 16
