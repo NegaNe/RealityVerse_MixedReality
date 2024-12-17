@@ -58,6 +58,10 @@ if(other.layer == LayerMask.NameToLayer("GunDisplay")){
             GameController.Instance.GunTaken=true;
         GunManager.instance.ChangeGun(GunManager.WeaponType.Shotgun);
         break;
+    case "SecretGun":
+            GameController.Instance.GunTaken=true;
+        GunManager.instance.ChangeGun(GunManager.WeaponType.SecretGun);
+        break;
                 }
             }
         }

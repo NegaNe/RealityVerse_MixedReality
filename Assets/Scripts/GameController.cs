@@ -34,6 +34,9 @@ public class GameController : MonoBehaviour
     public float Timer = 300; // Timer in seconds
     public bool GunTaken, StartGame;
     private bool isGameOver = false; 
+    float rushTimer = 5;
+bool isRushSoundPlayed = false;
+
 
     public void WallDestroySound(Vector3 WallPos)
     {
@@ -99,7 +102,6 @@ public class GameController : MonoBehaviour
     private void GameStateChecker()
     {
 
-    float rushTimer = 5;
 
         if (PlayerHealth <= 0) 
         {
@@ -109,20 +111,29 @@ public class GameController : MonoBehaviour
         {
             EndGame("Win");
         }
-        if(Timer <= 60)
-        {
+
+{
+    if (Timer <= 60 && !isRushSoundPlayed)
+    {
         EnemyRushUI.gameObject.SetActive(true);
         MaxEnemiesInMap = 16;
         AudioSource.PlayClipAtPoint(rushSound, Player.transform.position);
-            if(rushTimer >= 0)
-            {
-                rushTimer -= Time.deltaTime;
-            }
-            if(rushTimer <= 0)
-            {
-                EnemyRushUI.gameObject.SetActive(false);
-            }
+        isRushSoundPlayed = true;
+    }
+
+    if (Timer <= 60)
+    {
+        if (rushTimer > 0)
+        {
+            rushTimer -= Time.deltaTime;
         }
+        if (rushTimer <= 0)
+        {
+            EnemyRushUI.gameObject.SetActive(false);
+        }
+    }
+}
+
     }
 
     private void EndGame(string result)

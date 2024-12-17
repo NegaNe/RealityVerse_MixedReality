@@ -56,6 +56,9 @@ void InitGun(WeaponType currGun)
     case WeaponType.Shotgun:
     GunDamage = ShotgunData.GunDamage;
     break;
+        case WeaponType.SecretGun:
+    GunDamage = 15f;
+    break;
     }}
 
 void Awake()

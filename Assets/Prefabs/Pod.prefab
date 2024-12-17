@@ -315,10 +315,9 @@ GameObject:
   - component: {fileID: 6339343366391308764}
   - component: {fileID: 4557335168605403903}
   - component: {fileID: 5922415517519552104}
-  - component: {fileID: 5666704324189703849}
   m_Layer: 8
   m_Name: secret
-  m_TagString: Secret Gun
+  m_TagString: SecretGun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -331,16 +330,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 37704183988779913}
   m_LocalRotation: {x: -0, y: -0.70694834, z: -0, w: 0.70726526}
-  m_LocalPosition: {x: 0, y: 0, z: -0.08494909}
-  m_LocalScale: {x: 0.0003693441, y: 0.0021014, z: 0.0013606999}
+  m_LocalPosition: {x: 0, y: 0, z: -0.22999999}
+  m_LocalScale: {x: 0.0010000002, y: 0.0009999999, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 728495969143798698}
-  m_Father: {fileID: 1437205110555396494}
+  m_Father: {fileID: 1562441203466012775}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.6807, y: 0.29377747}
+  m_AnchoredPosition: {x: 0.5002572, y: 0.13980083}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!65 &4557335168605403903
@@ -358,7 +357,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -386,24 +385,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5666704324189703849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37704183988779913}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15140c438b2eada4cac4ef70d8e167f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameDevGun: {fileID: 0}
 --- !u!1 &127185926611705278
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +601,7 @@ Transform:
   - {fileID: 1025749273687005974}
   - {fileID: 2450884244219060989}
   - {fileID: 4445304445071839998}
+  - {fileID: 6339343366391308764}
   m_Father: {fileID: 1437205110555396494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &881682003385635952
@@ -3579,7 +3566,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1562441203466012775}
-  - {fileID: 6339343366391308764}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8734292036825171652
